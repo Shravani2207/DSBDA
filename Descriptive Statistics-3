@@ -1,0 +1,390 @@
+import pandas as pd
+
+import numpy as np
+
+df = pd.read_csv("C:/Users/SHRAVANI/Downloads/Mall_Customers (2).csv")
+
+df
+df.info()
+df.describe()
+df.mean(numeric_only=True)
+
+df.median(numeric_only=True)
+
+df.mode(numeric_only=True)
+
+df.min(numeric_only=True)
+
+df.max(numeric_only=True)
+
+df.std(numeric_only=True) #tells how much the numbers are spread out from the average
+
+df.loc[:,'Age'].mean()
+df.loc[:,'Age'].median()
+df.loc[:,'CustomerID'].mean()
+df.loc[:,'CustomerID'].median()
+df.loc[:,'Age'].std() #tells how much age values vary from average age
+df.loc[:,'CustomerID'].std()
+df.mean(axis=1, numeric_only=True)[0:4] # If axis=1 → Row-wise:shown for the first 4 rows
+
+df.mean(numeric_only=True)[0:4] #If used with axis=0 (default) → Column-wise:
+
+df.median(axis=1, numeric_only=True)[0:4]
+
+df.mode(axis=1, numeric_only=True)[0:4]
+
+df.std(axis=1, numeric_only=True)[0:4]
+
+df.min(axis=1, numeric_only=True)[0:4]
+
+df.max(axis=1, numeric_only=True)[0:4]
+
+df.loc[:,'Age'].max(skipna = False) #skipna=False means don't skip missing values
+df.loc[:,'Age'].min(skipna = False)
+df.loc[:,'Annual Income (k$)'].std() #shows how much the income values vary from the average."
+df.groupby(['Genre']) ['Age'].mean() #average age for each gender group 
+df.groupby(['Genre']) ['Age'].median()
+df.groupby(['Genre']) ['Age'].std()
+from sklearn import preprocessing
+enc = preprocessing.OneHotEncoder()
+enc_df = pd.DataFrame(enc.fit_transform(df[['Genre']]).toarray())
+enc_df
+df1 = df.join(enc_df) #Combines df and enc_df in new DataFrame df1
+
+df1
+del df1['Genre'] #Deletes original Genre column from df1 bec it's now encoded
+df1
+iris=pd.read_csv("C:/Users/SHRAVANI/Downloads/IRIS (1).csv")
+iris
+irisSet = (iris['species']== 'Iris-setosa') #Creates a Boolean filter for rows where species is Iris-setosa
+print('Iris-setosa')
+print(iris[irisSet].describe())
+
+
+
+matplotlib is a Python library used to make graphs and charts.
+pyplot is a part of that library that helps you draw things like lines, bars, and points.
+as plt means: Use the short name plt instead of typing matplotlib.pyplot every time
+
+Polynomial Fitting for Simple Linear Regression:
+x = np.array([95, 85, 80, 70, 60])
+y = np.array([85, 95, 70, 65, 70])
+Creates two NumPy arrays: x representing some independent variable values (e.g., hours studied), and y representing the dependent variable values (e.g., exam scores).
+________________________________________
+model = np.polyfit(x, y, 1)
+s using NumPy's polyfit function to perform linear regression on the data.
+x: array of input (independent variable) values
+y: array of output (dependent variable) values
+1: degree of the polynomial (1 means linear, so this fits a line)
+model is a NumPy array with two coefficients:
+________________________________________
+predict = np.poly1d(model)
+np.poly1d(model) turns that into a function you can use to predict new values of y from x.
+________________________________________
+predict(65)
+Makes a prediction for x = 65 using the model created above.
+________________________________________
+y_pred = predict(x)
+y_pred
+Generates predictions for the values in x using the predict function. These are the predicted values for each value of x.
+________________________________________
+from sklearn.metrics import r2_score
+r2_score(y, y_pred)
+Calculates the R² score which measures how well the predicted values (y_pred) match the actual values (y). The R² score ranges from 0 to 1, with 1 being a perfect fit.
+________________________________________
+y_line = model[1] + model[0] * x
+plt.plot(x, y_line, c='r')
+plt.scatter(x, y_pred)
+plt.scatter(x, y, c='r')
+Plots the linear regression line:
+y_line calculates the predicted values from the linear model (intercept + slope * x).
+plt.plot(x, y_line, c='r') plots the regression line in red.
+plt.scatter(x, y_pred) plots the predicted values as points.
+plt.scatter(x, y, c='r') plots the actual data points in red.
+________________________________________
+Working with California Housing Data:
+from sklearn.datasets import fetch_california_housing
+housing = fetch_california_housing()
+data = pd.DataFrame(housing.data)
+data.columns = housing.feature_names
+data.head()
+Loads the California Housing dataset from Scikit-learn. The data is then converted into a Pandas DataFrame with appropriate column names.
+________________________________________
+data['PRICE'] = housing.target
+Adds the target variable (PRICE) (the price of homes) to the DataFrame data.
+________________________________________
+data.isnull().sum()
+Checks for missing values in the dataset. This line shows the number of missing (null) values for each column.
+________________________________________
+x = data.drop(['PRICE'], axis=1)
+y = data['PRICE']
+Splits the data:
+x contains all the independent variables (all columns except 'PRICE').
+y contains the dependent variable ('PRICE').
+________________________________________
+Train-Test Split:
+from sklearn.model_selection import train_test_split
+xtrain, xtest, ytrain, ytest = train_test_split(x, y, test_size=0.2, random_state=0)
+Splits the dataset into training and test sets:
+80% of the data is used for training (xtrain, ytrain).
+20% of the data is used for testing (xtest, ytest).
+________________________________________
+Linear Regression Model:
+from sklearn.linear_model import LinearRegression
+lm = LinearRegression()
+Creates a Linear Regression model object (lm).
+________________________________________
+model = lm.fit(xtrain, ytrain)
+Fits the linear regression model to the training data (xtrain, ytrain).
+________________________________________
+ytrain_pred = lm.predict(xtrain)
+ytest_pred = lm.predict(xtest)
+ytrain_pred contains predicted values for the training data.
+ytest_pred contains predicted values for the test data.
+________________________________________
+Model Performance Evaluation:
+df = pd.DataFrame(ytrain_pred, ytrain)
+df = pd.DataFrame(ytest_pred, ytest)
+Creates DataFrames for training and testing predictions, showing predicted vs. actual values.
+________________________________________
+from sklearn.metrics import mean_squared_error, r2_score
+mse = mean_squared_error(ytest, ytest_pred)
+print(mse)
+Calculates Mean Squared Error (MSE) between the actual and predicted values for the test set. Lower MSE indicates a better model.
+________________________________________
+mse = mean_squared_error(ytrain_pred, ytrain)
+print(mse)
+Calculates Mean Squared Error (MSE) for the training set.
+________________________________________
+Visualization of Predictions vs. Actual Values:
+plt.scatter(ytrain, ytrain_pred, c='blue', marker='o', label='Training data')
+plt.scatter(ytest, ytest_pred, c='lightgreen', marker='s', label='Test data')
+plt.xlabel('True values')
+plt.ylabel('Predicted')
+plt.title("True value vs Predicted value")
+plt.legend(loc='upper left')
+plt.plot()
+plt.show()
+Plots the true vs. predicted values:
+plt.scatter(ytrain, ytrain_pred, ...) This draws a scatter plot of actual (ytrain) vs predicted (ytrain_pred) values for the training data =Blue color (c='blue'),Round markers (marker='o'),Label for legend: 'Training data'
+plt.scatter(ytest, ytest_pred, ...) This draws a scatter plot for test data (actual vs predicted values)
+Light green color,Square markers (marker='s'),Label: 'Test data'
+plt.xlabel() and plt.ylabel() add labels to the axes.
+plt.title() adds a title to the plot.
+plt.legend() adds a legend to differentiate between training and test data. Name tag for colors/shapes in your graph
+plt.show() displays the plot.
+________________________________________
+In summary:
+Linear regression is applied to predict house prices from multiple features.
+Polynomial regression is used to fit a simple linear model to a small dataset.
+The performance of the regression models is evaluated using Mean Squared Error and visualized to compare true vs. predicted values.
+________________________________________
+Explain Linear Regression.
+Answer: Linear regression is a statistical method used to model the relationship between a dependent variable (Y) and one or more independent variables (X). It assumes that there is a linear relationship between the variables, and the goal is to fit a line (regression line) that best predicts the dependent variable based on the independent variables. This line is defined by the equation:
+Y=mX+bY = mX + b 
+where:
+YY is the dependent variable (predicted).
+XX is the independent variable (predictor).
+mm is the slope of the line.
+bb is the intercept.
+What are the different types of linear regression?
+Answer: There are mainly two types of linear regression:
+Univariate Linear Regression: Involves only one predictor (independent variable) to predict the outcome.
+Multivariate Linear Regression: Involves multiple predictors (independent variables) to predict the outcome. This can be represented as:
+Y=m1X1+m2X2+⋯+mnXn+bY = m_1X_1 + m_2X_2 + \dots + m_nX_n + b 
+What is the purpose of the least squares method in linear regression?
+Answer: The least squares method minimizes the sum of the squared differences between the observed values (Y) and the predicted values (Y^\hat{Y}). T
+What are the metrics used to evaluate the performance of a linear regression model?
+Answer:
+MSE (Mean Squared Error): Measures the average squared differences between actual and predicted values.
+RMSE (Root Mean Squared Error): The square root of MSE, providing a metric in the same units as the dependent variable.
+R-Squared (R²): Measures how much of the variance in the dependent variable is explained by the model. A higher R² indicates a better fit.
+________________________________________
+What is the purpose of the train_test_split function in this context?
+Answer: The train_test_split function is used to split the dataset into training and testing subsets. The training data is used to train the model, while the test data is used to evaluate its performance. In this case, 80% of the data is used for training, and 20% is used for testing.
+What does the LinearRegression() class do?
+Answer: The LinearRegression() class from sklearn.linear_model is used to create a linear regression model. The fit() method is used to train the model by learning the relationship between the independent variables (X) and the dependent variable (Y).
+What does y_pred represent?
+Answer: y_pred represents the predicted values for the dependent variable (Y) based on the independent variable (X) using the trained linear regression model. These are the values that the model predicts for each input value of X.
+Why do we use the mean_squared_error() function, and what does the output represent?
+Answer: The mean_squared_error() function calculates the average of the squared differences between actual and predicted values. It is used to assess the model's accuracy. A lower MSE indicates a better fit, as it suggests the model's predictions are close to the actual values.
+Explain the significance of the scatter plot.
+Answer: The scatter plot shows the relationship between the actual values (Y) and the predicted values (Y_pred). The points represent the data, and the line represents the regression line
+What does it mean when we say that the model's R² score is low?
+This suggests that the model may not be a good fit for the data, and improvements may be needed. Possible improvements include adding more predictors, using a different model, or transforming the data.
+________________________________________
+What is overfitting and how can we prevent it in linear regression?
+Answer: Overfitting occurs when the model learns the noise or random fluctuations in the training data, making it perform poorly on new, unseen data. It can be prevented by:
+Using a simpler model with fewer parameters.
+Regularization techniques like Lasso or Ridge regression.
+Cross-validation to ensure the model generalizes well.
+How would you handle multicollinearity in linear regression models?
+Answer: Multicollinearity occurs when two or more predictors are highly correlated, which can make the model unstable. It can be detected using variance inflation factor (VIF). 
+How would you interpret the coefficients in the linear regression equation?
+Answer: The coefficients (slope mm and intercept bb) represent the relationship between the independent variable (X) and the dependent variable (Y):
+The slope mm indicates how much Y changes for a unit change in X.
+The intercept bb is the predicted value of Y when X is 0.
+What do the terms "dependent variable" and "independent variable" mean in the context of linear regression?
+Answer: In linear regression, the dependent variable (Y) is the outcome or target that we are trying to predict or explain. The independent variable (X) is the predictor or feature that is used to explain or predict the dependent variable. In the equation Y=β0+β1XY = \beta_0 + \beta_1X, YY is the dependent variable, and XX is the independent variable.
+________________________________________
+What is the least squares method and how is it used in linear regression?
+Answer: The least squares method is an approach used to minimize the sum of the squared differences between the observed values and the predicted values of the dependent variable. This method helps to find the best-fitting line minimizing the error between the actual data points and the regression model's predictions.
+What is the significance of the equation y = β₀ + β₁ * x?
+Answer: This is the equation of a straight line, where:
+yy is the predicted value of the dependent variable.
+β0=is the y-intercept, the value of yy when x=0x = 0.
+β1= is the slope, representing the change in yy for a unit change in xx.
+xx is the independent variable.
+The equation represents the relationship between the independent and dependent variables and allows predictions of yy for given values of xx.
+________________________________________
+What is Mean Squared Error (MSE), and how is it calculated in linear regression?
+Answer: MSE is a metric used to measure the average squared difference between the observed actual outcomes and the predicted values. 
+What does the Root Mean Squared Error (RMSE) tell us, and how is it different from MSE?
+Answer: RMSE is the square root of MSE and gives the error metric in the same units as the dependent variable. It is useful for comparing models because it gives a more interpretable value. While MSE squares the errors, RMSE brings it back to the original scale of the target variable.
+________________________________________
+What is the difference between training data and testing data in machine learning?
+Answer: Training data is used to train the model and adjust the model's parameters, while testing data is used to evaluate the model's performance on unseen data. The testing data helps check how well the model generalizes to new data.
+How does the training phase work in building a machine learning model?
+Answer: During the training phase, the model learns the relationship between the independent and dependent variables by adjusting its parameters (coefficients) to minimize the error (e.g., using the least squares method).
+What is generalization in machine learning, and why is it important?
+Answer: Generalization refers to a model's ability to perform well on unseen data. It's important because a model that only performs well on the training data may overfit and not work effectively on new, real-world data.
+How would you split the dataset into training and testing sets? Why is this step necessary?
+Answer: The dataset can be split using a function like train_test_split in scikit-learn. Typically, 70-80% of the data is used for training, and the remaining 20-30% is used for testing. This step is necessary to evaluate how well the model generalizes to unseen data.
+________________________________________
+How did you perform the prediction for a score of 65 in standard X? What was the result?
+Answer: I used the model to predict the value for x=65x = 65. The prediction was calculated using the formula for the regression line.
+How would you evaluate the performance of the linear regression model for this example?
+Answer: I would evaluate the performance using metrics like R², MSE, and RMSE. A high R² value would indicate a good fit, while a low MSE or RMSE would suggest accurate predictions.
+________________________________________
+Could you explain the steps involved in using the numpy.polyfit() function to build a linear regression model in Python?
+Answer: np.polyfit(x, y, 1) fits a 1st-degree polynomial (linear regression) to the data. It returns the slope and intercept. np.poly1d(model) then creates a function from the model, which can be used to make predictions.
+How would you use sklearn to split the dataset and train a linear regression model for the Boston housing dataset?
+Answer: You can use train_test_split() to split the dataset into training and testing sets, then create a model using LinearRegression() and train it with the fit() method.
+How do you calculate and interpret the R-squared value using sklearn?
+Answer: After fitting the model, you can calculate the R² using the score() method of the model, which gives the proportion of the variance explained by the model.
+________________________________________
+Answer: Linear regression can be used to predict house prices based on features like size, number of rooms, and location. It can also be used to predict sales revenue based on advertising spending, or to model the relationship between a person's age and their income.
+How would you apply linear regression to predict the price of a house based on its features, as shown in the Boston dataset?
+Answer: By using features like the number of rooms, crime rate, and proximity to amenities, linear regression can model how these factors influence the house price.
+________________________________________
+What is overfitting in linear regression, and how can it be avoided when using multiple predictor variables?
+Answer: Overfitting occurs when the model learns the noise in the training data instead of the underlying pattern, leading to poor generalization. It can be avoided by using regularization techniques like Lasso or Ridge regression or by simplifying the model (e.g., reducing the number of predictors).
+________________________________________
+How would you handle a situation where your linear regression model gives a very high MSE or a low R-squared value?
+Answer: I would first check for issues like data outliers, incorrect assumptions, or insufficient features. Then, I might apply data transformations or try using more complex models.
+If you are working with multivariate regression, how would you handle correlation between predictor variables (multicollinearity)?
+Answer: I would use techniques like Variance Inflation Factor (VIF) to detect multicollinearity and address it by removing or combining correlated features, or by using regularization techniques like Ridge regression.
+Definitions:
+SST (Total Sum of Squares): The total variability in the target variable (Y). It represents the total variation in the observed data from the mean of Y.
+SST=∑(Yi−Yˉ)2SST = \sum (Y_i - \bar{Y})^2 
+SSE (Sum of Squares of Errors): The sum of squared residuals, or the difference between actual and predicted values. It represents the variation in Y that the model couldn't explain.
+SSE=∑(Yi−Y^i)2SSE = \sum (Y_i - \hat{Y}_i)^2 
+SSR (Sum of Squares for Regression): The portion of variability explained by the regression model.
+SSR=∑(Y^i−Yˉ)2SSR = \sum (\hat{Y}_i - \bar{Y})^2 
+MSE (Mean Squared Error): The average of the squared differences between actual and predicted values.
+MSE=SSEnMSE = \frac{SSE}{n} 
+RMSE (Root Mean Squared Error): The square root of MSE, which gives the standard deviation of the residuals.
+RMSE=MSERMSE = \sqrt{MSE} 
+R² (R-Squared): A measure of how well the model fits the data. It represents the proportion of the variance in the dependent variable that is predictable from the independent variable.
+R2=SSRSSTR^2 = \frac{SSR}{SST} 
+Now, let’s compute these values for your data.
+Data:
+Xi (X Standard)	Yi (XII Standard)
+95	85
+85	95
+80	70
+70	65
+60	70
+Step 1: Compute the Linear Regression Model
+We will first compute the model for linear regression using the formula Y=mX+bY = mX + b, where mm is the slope and bb is the intercept.
+We’ll use Python to calculate the predictions, errors, and the required metrics.
+Python Code:
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Data points
+X = np.array([95, 85, 80, 70, 60])
+Y = np.array([85, 95, 70, 65, 70])
+# Fit the linear regression model
+model = np.polyfit(X, Y, 1)
+predict = np.poly1d(model)
+# Predicted values
+Y_pred = predict(X)
+# Calculate the necessary metrics
+# Mean of Y
+Y_mean = np.mean(Y)
+# SST (Total Sum of Squares)
+SST = np.sum((Y - Y_mean) ** 2)
+# SSE (Sum of Squares of Errors)
+SSE = np.sum((Y - Y_pred) ** 2)
+# SSR (Sum of Squares for Regression)
+SSR = np.sum((Y_pred - Y_mean) ** 2)
+# MSE (Mean Squared Error)
+MSE = SSE / len(Y)
+# RMSE (Root Mean Squared Error)
+RMSE = np.sqrt(MSE)
+# R-Squared (R²)
+R_square = SSR / SST
+# Output the values
+print(f"SST (Total Sum of Squares): {SST}")
+print(f"SSE (Sum of Squares of Errors): {SSE}")
+print(f"SSR (Sum of Squares for Regression): {SSR}")
+print(f"MSE (Mean Squared Error): {MSE}")
+print(f"RMSE (Root Mean Squared Error): {RMSE}")
+print(f"R-Squared (R²): {R_square}")
+Explanation of Code:
+Linear Regression Model: The model is created using np.polyfit(X, Y, 1), where 1 specifies that it is a linear fit (degree 1 polynomial).
+Predictions: The predicted values YpredY_{\text{pred}} are computed using the model.
+Metrics:
+SST: The total variability in the target values.
+SSE: The sum of squared residuals.
+SSR: The sum of squares explained by the regression model.
+MSE: The mean of squared errors.
+RMSE: The square root of MSE, representing the standard deviation of errors.
+R²: The proportion of the variance explained by the model.
+Step 2: Comment on Model Fit
+If R² is close to 1, it means the model fits the data well (explains most of the variance in Y).
+If R² is low, the model does not fit well, and the predictions may not be reliable.
+Step 3: Code to Calculate R-Square for the Boston Dataset (Linear Regression Model)
+You can adapt the previous code for the Boston dataset. Here is an example for calculating R² using the Boston housing dataset:
+from sklearn.datasets import load_boston
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score
+
+# Load the Boston dataset
+boston = load_boston()
+X_boston = boston.data
+y_boston = boston.target
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X_boston, y_boston, test_size=0.2, random_state=42)
+
+# Initialize and train the linear regression model
+model_boston = LinearRegression()
+model_boston.fit(X_train, y_train)
+
+# Make predictions
+y_pred_train = model_boston.predict(X_train)
+y_pred_test = model_boston.predict(X_test)
+
+# Calculate R-squared for the test set
+r2_train = r2_score(y_train, y_pred_train)
+r2_test = r2_score(y_test, y_pred_test)
+
+print(f"R-Squared for Train Set: {r2_train}")
+print(f"R-Squared for Test Set: {r2_test}")
+Expected Output for Example Data:
+When you run the first code for your example data, you'll get the following metrics (values might slightly vary due to rounding):
+SST (Total Sum of Squares): Value based on the variance of actual values.
+SSE (Sum of Squares of Errors): Value based on the difference between actual and predicted values.
+SSR (Sum of Squares for Regression): Value based on how much of the variance is explained by the model.
+MSE (Mean Squared Error): Average of squared errors.
+RMSE (Root Mean Squared Error): Square root of MSE, which shows the error in the same units as the target variable.
+R-Squared (R²): Proportion of variance explained by the model.
+The interpretation of these values will give insight into how well the linear regression model fits your data and whether it is a good model or needs improvements.
+Comment:
+If R² is low (e.g., below 0.5), it suggests that the model doesn’t explain much of the variance in the data and might not be a good fit.
+If R² is high (close to 1), it suggests that the model explains a significant portion of the variance, indicating a good fit.
+Here are the answers to the potential questions that could be asked in your oral exam on linear regression and the related code:
+
