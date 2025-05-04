@@ -1,0 +1,217 @@
+import numpy as np
+import pandas as pd
+dataset = pd.read_csv('C:/Users/SHRAVANI/Downloads/data6 (3).csv')
+dataset
+
+X = dataset.iloc[:, :-1].values # X is all columns except last one [features (X)] 
+y = dataset.iloc[:, -1].values # y is  last column [target variable (y)]
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 2)
+from sklearn.naive_bayes import GaussianNB
+classifier = GaussianNB()
+classifier.fit(X_train, y_train)#Fits (trains) the model using training data (X_train and y_train).
+y_pred = classifier.predict(X_test)
+y_pred #contains predicted target values(class labels)for test data.
+# Evaluate the performance of Model for train_y and
+from sklearn.metrics import precision_score,confusion_matrix,accuracy_score,recall_score
+accuracy = accuracy_score(y_test,y_pred)
+precision =precision_score(y_test, y_pred,average='micro')#average='micro' means scores are averaged over all classes
+recall = recall_score(y_test, y_pred,average='micro')
+print(f"Accuracy: {accuracy}")
+print(f"Precision: {precision}")
+print(f"Recall: {recall}")
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)#Compares y_test with y_pred to create confusion matrix, which shows how well the model performed
+# Display the confusion matrix and evaluation metrics
+print("Confusion Matrix:")
+print(cm)
+from sklearn.preprocessing import StandardScaler
+# Feature Scaling (assuming you want to scale your features)
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)  # Fit and transform the training set
+X_test = sc.transform(X_test)  # Only transform the test set
+
+# Accept user input for prediction
+age = float(input("Enter age: "))
+salary = float(input("Enter salary: "))
+
+# Scale the input before making the prediction
+scaled_input = sc.transform([[age, salary]])  # Scale the input values
+prediction = classifier.predict(scaled_input)  # Make the prediction
+
+print(f"The predicted class for age {age} and salary {salary} is: {prediction[0]}")
+
+
+________________________________________
+Import Libraries:
+import numpy as np
+import pandas as pd
+Imports the necessary libraries:
+numpy: For numerical operations (arrays, calculations).
+pandas: For data manipulation (reading CSV files, DataFrame operations).
+________________________________________
+Load the Dataset:
+dataset = pd.read_csv('data6.csv')
+dataset
+Loads the dataset (data6.csv) into a pandas DataFrame called dataset. This dataset will be used for training and testing the Naive Bayes model.
+________________________________________
+Define Features and Target:
+X = dataset.iloc[:, :-1].values
+y = dataset.iloc[:, -1].values
+Defines the features (X) and target variable (y):
+X is all columns except the last one (dataset.iloc[:, :-1] selects all columns except the last one). These are the features (independent variables) used for predictions.
+y is the last column (dataset.iloc[:, -1]) and contains the target variable (dependent variable).
+________________________________________
+Split the Dataset into Training and Testing Sets:
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 2)
+Splits the dataset into training and testing sets:
+train_test_split: This function divides the dataset into training (75%) and testing (25%) sets.
+random_state=2: This ensures that the split is reproducible (i.e., you'll get the same split every time you run the code).
+X_train, X_test: Features for the training and testing sets.
+y_train, y_test: Target variables for the training and testing sets.
+________________________________________
+Train the Naive Bayes Model:
+from sklearn.naive_bayes import GaussianNB
+classifier = GaussianNB()
+classifier.fit(X_train, y_train)
+Trains the Naive Bayes model:
+GaussianNB: This is the implementation of Gaussian Naive Bayes, a classification algorithm based on Bayes' theorem with Gaussian (normal) distribution assumption.
+classifier.fit(X_train, y_train): Fits (trains) the model using the training data (X_train and y_train).
+________________________________________
+Make Predictions on the Test Set:
+y_pred = classifier.predict(X_test)
+y_pred
+Makes predictions on the test set (X_test) using the trained model (classifier).
+y_pred contains the predicted target values (class labels) for the test data.
+________________________________________
+Evaluate the Model Performance:
+from sklearn.metrics import precision_score, confusion_matrix, accuracy_score, recall_score
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred, average='micro')
+recall = recall_score(y_test, y_pred, average='micro')
+print(f"Accuracy: {accuracy}")
+print(f"Precision: {precision}")
+print(f"Recall: {recall}")
+Evaluates the model's performance:
+accuracy_score: Calculates the accuracy of the model as the percentage of correct predictions.
+precision_score: Calculates precision, the proportion of true positive predictions among all positive predictions (average='micro' means the scores are averaged over all classes).
+recall_score: Calculates recall, the proportion of true positive predictions among all actual positives.
+These metrics are printed out to assess how well the model is performing.
+________________________________________
+Display the Confusion Matrix:
+cm = confusion_matrix(y_test, y_pred)
+# Display the confusion matrix and evaluation metrics
+print("Confusion Matrix:")
+print(cm)
+Generates and displays the confusion matrix:
+confusion_matrix(y_test, y_pred): Compares the true labels (y_test) with the predicted labels (y_pred) to create a confusion matrix, which shows how well the model performed.
+The confusion matrix is printed to the console.
+________________________________________
+Feature Scaling (Optional for Naive Bayes):
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)  # Fit and transform the training set
+X_test = sc.transform(X_test)  # Only transform the test set
+Feature scaling: Although Naive Bayes doesn't typically require feature scaling, sometimes it helps for better performance, especially if features are measured in different units.
+StandardScaler(): Standardizes features by removing the mean and scaling to unit variance (z-score normalization).
+fit_transform(X_train): Computes the mean and standard deviation from X_train and scales the training set.
+transform(X_test): Uses the statistics from the training set to scale the test set (important to prevent data leakage).
+________________________________________
+Accept User Input for Prediction:
+age = float(input("Enter age: "))
+salary = float(input("Enter salary: "))
+Accepts user input for the features (age and salary) for which the model will predict the class label.
+________________________________________
+Scale the User Input:
+scaled_input = sc.transform([[age, salary]])  # Scale the input values
+Scales the input values (age and salary) using the same scaling transformation applied to the training and testing data (sc.transform()).
+________________________________________
+Make the Prediction for the User Input:
+prediction = classifier.predict(scaled_input)  # Make the prediction
+Makes the prediction for the input data (scaled_input) using the trained Naive Bayes classifier. The prediction will return a class label.
+________________________________________
+Display the Prediction Result:
+print(f"The predicted class for age {age} and salary {salary} is: {prediction[0]}")
+Prints the predicted class (output) for the user-provided age and salary, showing the class label predicted by the model.
+________________________________________
+This code demonstrates how to:
+Load a dataset and split it into training and testing sets.
+Train a Naive Bayes classifier on the training data.
+Predict the target variable on the test set.
+Evaluate the model's performance using metrics like accuracy, precision, and recall.
+Allow the user to input values for features (age and salary) and make predictions using the trained model.
+Q.“How do we take input from the user
+We use the input() function to ask the user to enter values like age and salary. Then we convert those values to numbers using float(). After that, we scale the input using the same StandardScaler we used for training data. Finally, we give the scaled input to the model to predict the class."
+"Gaussian Naïve Bayes is used when the features are continuous, like height or weight, and we assume they follow a normal (bell-shaped) distribution. It calculates the probability of each feature using the formula for the normal distribution. This helps in classifying data when the values are numeric and spread like a Gaussian curve."
+StandardScaler is used for feature scaling, which normalizes the feature values to have a mean of 0 and a standard deviation of 1. 
+ravel() is a NumPy function that turns a multi-dimensional array into a 1D (one-dimensional) array. It’s often used when the model expects the target (y) values in a flat format."
+What is the Naïve Bayes classifier and how does it work?
+Answer: The Naïve Bayes classifier is a probabilistic classifier based on Bayes' theorem, which is used for classification tasks. It works by calculating the conditional probability of each class given the input features and choosing the class with the highest probability. The "naïve" assumption is that all features are independent of each other, which simplifies the calculation of the joint probability.
+What is Bayes' Theorem?
+Answer: Bayes' Theorem describes the probability of an event, based on prior knowledge of conditions that might be related to the event. The formula is:
+P(Ck∣X)=P(Ck)⋅P(X∣Ck)P(X)P(C_k | X) = \frac{P(C_k) \cdot P(X | C_k)}{P(X)} 
+Where:
+P(Ck∣X)P(C_k | X) is the posterior probability of class CkC_k given the features XX,
+P(Ck)P(C_k) is the prior probability of class CkC_k,
+P(X∣Ck)P(X | C_k) is the likelihood of the features XX given class CkC_k,
+P(X)P(X) is the total probability of the features XX.
+What are the steps involved in applying the Naïve Bayes algorithm on the Iris dataset?
+Answer: The steps for applying Naïve Bayes on the Iris dataset are:
+Import necessary libraries (Pandas, NumPy, Matplotlib, etc.).
+Load and preprocess the dataset (handle missing values, convert categorical data to numerical if needed).
+Split the dataset into independent (X) and dependent (Y) variables.
+Split the dataset into training and test sets.
+Train the Naïve Bayes classifier (using Gaussian Naïve Bayes for continuous features).
+Make predictions on the test set.
+Evaluate the model using metrics like accuracy, precision, recall, and confusion matrix.
+What is the confusion matrix, and what does it tell us?
+Answer: The confusion matrix is a table used to evaluate the performance of a classification model. It shows the number of correct and incorrect predictions, broken down by each class. The four key elements are:
+True Positive (TP): Correctly predicted positive values.
+True Negative (TN): Correctly predicted negative values.
+False Positive (FP): Incorrectly predicted positive values.
+False Negative (FN): Incorrectly predicted negative values. This matrix helps in calculating various metrics like accuracy, precision, recall, and F1-score.
+What is the formula for calculating accuracy, precision, and recall from the confusion matrix?
+Accuracy: TP+TNTP+TN+FP+FN\frac{TP + TN}{TP + TN + FP + FN}
+Precision: TPTP+FP\frac{TP}{TP + FP}
+Recall: TPTP+FN\frac{TP}{TP + FN}
+How is the Naïve Bayes classifier used in the Iris dataset?
+Answer: In the Iris dataset, Naïve Bayes is used to classify the type of Iris flower (Setosa, Versicolor, Virginica) based on features like sepal length, sepal width, petal length, and petal width. The algorithm calculates the probability of each class given the feature values and predicts the class with the highest probability.
+What does the precision score in your evaluation tell you about the model's performance?
+Answer: Precision indicates how many of the instances that were predicted as positive were actually positive. A higher precision score means that fewer false positives were made. It's useful when the cost of false positives is high.
+How do you visualize the performance of a classification model like Naïve Bayes?
+Answer: One common way to visualize the performance is by using a heatmap of the confusion matrix. This helps you see how well the classifier is performing for each class and whether there are any specific classes where it is making more mistakes.
+What are the limitations of the Naïve Bayes classifier?
+Answer: The main limitation of Naïve Bayes is the assumption of feature independence, which may not hold true in many real-world datasets. This can lead to less accurate predictions when the features are highly correlated. Additionally, it may not perform well if the data contains many irrelevant or redundant features.
+What is the Naïve Bayes classifier, and how does it work?
+Answer: The Naïve Bayes classifier is a probabilistic classifier based on Bayes' theorem, which calculates the posterior probability of each class given the input features. The algorithm assumes that all features are conditionally independent given the class label (this is the "naïve" assumption). The class with the highest probability is chosen as the predicted class.
+What is the significance of using the GaussianNB classifier in this code?
+Answer: "Gaussian Naïve Bayes is used when the features are continuous, like height or weight, and we assume they follow a normal (bell-shaped) distribution. It calculates the probability of each feature using the formula for the normal distribution. This helps in classifying data when the values are numeric and spread like a Gaussian curve."
+Why are you splitting the dataset into a training set and a test set?
+Answer: We split the dataset so the model learns from the training set, and then we test how well it works using the test set — which the model hasn’t seen before. This helps us check if the model can make good predictions on new data."
+What is the purpose of the train_test_split function in this code?
+Answer: The train_test_split function splits the dataset into random training and testing subsets. In this code, it splits 75% of the data into the training set and 25% into the test set (test_size = 0.25). This function ensures that the model is tested on unseen data.
+What metrics are you using to evaluate the model, and what do they signify?
+Answer: The metrics used for evaluation are:
+Accuracy: The proportion of correctly predicted instances out of all instances.
+Precision: The proportion of positive predictions that are actually correct (for each class, it's TPTP+FP\frac{TP}{TP + FP}).
+Recall: The proportion of actual positives that are correctly predicted (for each class, it's TPTP+FN\frac{TP}{TP + FN}). These metrics help to understand the performance of the classifier, especially how well it performs in terms of false positives and false negatives.
+How does the confusion matrix help in evaluating the model?
+Answer: The confusion matrix is a table used to describe the performance of a classification algorithm. It shows the number of correct and incorrect predictions, broken down by class. It helps to understand how many instances were classified correctly (true positives, true negatives) and incorrectly (false positives, false negatives), allowing for a more detailed evaluation of the model's performance.
+Why do we use StandardScaler in this code?
+Answer: StandardScaler is used for feature scaling, which normalizes the feature values to have a mean of 0 and a standard deviation of 1. This is important because many machine learning algorithms, including Naïve Bayes, assume that the features have similar scales. Scaling helps improve the performance of the model and makes sure that one feature does not dominate the others due to its larger scale.
+Explain the role of fit_transform and transform methods in scaling.
+Answer: The fit_transform method is used on the training data to compute the mean and standard deviation, and then scale the data accordingly. The transform method is used on the test data to scale it based on the statistics (mean and standard deviation) computed from the training data. This ensures that the test data is scaled in the same way as the training data.
+Why are you asking for user input for prediction, and how is it handled in the code?
+AnswerThe user gives input, like age and salary, to predict the class. These values are first scaled using the same StandardScaler used during training, so they match the range of the training data. Then, the scaled input is given to the classifier, which predicts the class, and the result is shown to the user.
+What is the output of classifier.predict(scaled_input)?
+Answer: The output of classifier.predict(scaled_input) is the predicted class label for the given input features (age and salary). It returns a class (e.g., 0 or 1, depending on the dataset) that the model has determined is the most likely outcome based on the trained model.
+What does the average='micro' parameter in the precision and recall functions mean?
+Answer: The average='micro' parameter in the precision_score and recall_score functions calculates metrics globally by counting the total true positives, false positives, and false negatives across all classes. It gives an overall metric rather than a class-specific metric, which is useful when dealing with multi-class problems.
+What could be the possible challenges or limitations of using Naïve Bayes in this model?
+Answer: "The main limitation of Naïve Bayes is that it assumes all features are independent, which is often not true in real data. If features are related or depend on each other, the predictions can be less accurate. Also, it doesn’t work well when there are many irrelevant or repeated features in the dataset."
+Can you explain the process of training the Naïve Bayes model with the classifier.fit(X_train, y_train) method?
+Answer: The fit method trains the Naïve Bayes model by using the training data (X_train and y_train). It calculates the likelihood of each feature given the class label and the prior probability of each class. This learned information is stored in the classifier object, which is then used to make predictions on unseen data.
+What do you expect the classifier to predict for input values of age and salary?
+Answer: The classifier will predict the class label for the input values (age and salary) based on the patterns it has learned from the training data. The exact predicted class depends on the relationships between age, salary, and the target variable in the dataset.
+
