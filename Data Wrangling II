@@ -1,0 +1,365 @@
+
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv("C:/Users/SHRAVANI/Downloads/StudentsPerformanceTest1(1) (2).csv")
+df
+
+df.isnull()
+df.notnull()
+df.isnull().sum()
+df.notnull().sum()
+series = pd.isnull(df["math score"])
+df[series]
+series1 = pd.notnull(df["math score"])
+df[series1]
+missing_values = ["Na","na"]
+df = pd.read_csv("C:/Users/SHRAVANI/Downloads/StudentsPerformanceTest1(1) (2).csv", na_values = missing_values)
+df
+ndf = df
+ndf.fillna(0)
+df['math score'].fillna(value=df['math score'].mean(), inplace=True)
+df
+df['reading score'].fillna(value=df['reading score'].median(), inplace=True)
+df
+df['writing score'].fillna(value=df['writing score'].std(), inplace=True)
+df
+df['Placement Score'].fillna(value=df['Placement Score'].min(), inplace=True)
+df
+df['placement offer count'].fillna(value=df['placement offer count'].max(), inplace=True)
+df
+import pandas as pd
+import numpy as np
+df = pd.read_csv("C:/Users/SHRAVANI/Downloads/demo1 (2).csv")
+df
+pip install seaborn
+import pandas as pd
+import numpy as np
+df = pd.read_csv("C:/Users/SHRAVANI/Downloads/demo1 (2).csv")
+df
+col = ['math score', 'reading score', 'writing score', 'placement score']
+df.boxplot(col)
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots(figsize = (18,10))
+ax.scatter(df['placement score'], df['placement offer count'])
+plt.show()
+import matplotlib.pyplot as plt
+df['math score'].plot(kind = 'hist')
+df['log_math'] = np.log10(df['math score'])
+df['log_math'].plot(kind='hist')
+import pandas as pd
+import numpy as np
+df = pd.read_csv("C:/Users/SHRAVANI/Downloads/demo1 (2).csv")
+df
+# Handling outliers in 'math score' using the IQR method
+Q1 = df['math score'].quantile(0.25)
+Q3 = df['math score'].quantile(0.75)
+IQR = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
+# Capping the outliers
+df['math score'] = np.where(df['math score'] < lower_bound, lower_bound,
+                    np.where(df['math score'] > upper_bound, upper_bound, df['math score']))
+
+print(df['math score'])
+print(df['writing score'])
+print(df['reading score'])
+print(df['placement score'])
+print(df['placement offer count'])
+
+________________________________________
+import pandas as pd
+import numpy as np
+•	Importing Pandas (for data handling) and NumPy (for numerical operations).
+________________________________________
+df = pd.read_csv("C:/Users/SHRAVANI/Downloads/Mall_Customers (2).csv")
+•	Loads the Mall_Customers dataset into a DataFrame df.
+________________________________________
+df
+df.info()
+df.describe()
+•	df shows the whole dataset (when run in Jupyter Notebook).
+•	df.info() gives a summary: column names, data types, nulls.
+•	df.describe() gives descriptive stats: count, mean, std, min, max, etc. (only for numeric columns).
+________________________________________
+1. df.mean(numeric_only=True)
+"This returns the average (mean) of each numeric column in the DataFrame. Non-numeric columns are ignored."
+________________________________________
+2. df.median(numeric_only=True)
+"This returns the median, which is the middle value of each numeric column. It ignores any non-numeric data."
+________________________________________
+3. df.mode(numeric_only=True)
+"It shows the most common value(s) in the number columns."
+________________________________________
+4. df.min(numeric_only=True)
+"This gives the minimum value from each numeric column, ignoring non-numeric columns."
+________________________________________
+5. df.max(numeric_only=True)
+"This returns the maximum value from each numeric column, again excluding non-numeric data."
+________________________________________
+6. df.std(numeric_only=True)
+" "It tells how much the numbers are spread out from the average."
+________________________________________
+1. df.loc[:, 'Age'].mean()
+"It gives the average age of all customers."
+________________________________________
+2. df.loc[:, 'Age'].median()
+"It gives the middle age value when all ages are sorted."
+________________________________________
+3. df.loc[:, 'CustomerID'].mean()
+"It gives the average of all Customer IDs — though this usually has no meaning because IDs are just labels."
+________________________________________
+4. df.loc[:, 'CustomerID'].median()
+"It shows the middle Customer ID after sorting. Again, this is usually not useful for IDs."
+________________________________________
+5. df.loc[:, 'Age'].std()
+"It tells how much the age values vary from the average age."
+________________________________________
+6. df.loc[:, 'CustomerID'].std()
+"It shows how spread out the Customer IDs are, but this is not useful in most cases."
+________________________________________
+You're using axis=1, which means you're calculating values row-wise, not column-wise.
+________________________________________
+1. df.mean(axis=1, numeric_only=True)[0:4]
+"It gives the average of each row’s numeric values — shown for the first 4 rows."
+________________________________________
+2. df.median(axis=1, numeric_only=True)[0:4]
+"It gives the middle value from each row’s numeric values — for the first 4 rows."
+________________________________________
+3. df.mode(axis=1, numeric_only=True)[0:4]
+"It gives the most frequent value(s) in each row’s numeric data — first 4 rows only."
+________________________________________
+4. df.std(axis=1, numeric_only=True)[0:4]
+"It shows how much the numbers in each row vary from the row’s average — first 4 rows."
+________________________________________
+5. df.min(axis=1, numeric_only=True)[0:4]
+"It gives the smallest number in each row — for the first 4 rows."
+________________________________________
+6. df.max(axis=1, numeric_only=True)[0:4]
+"It gives the largest number in each row — for the first 4 rows."
+________________________________________
+1. df.loc[:, 'Age'].max(skipna=False)
+"It gives the maximum age, but if any value in the column is missing (NaN), it returns NaN instead of ignoring it."
+(Because skipna=False means don't skip missing values.)
+________________________________________
+2. df.loc[:, 'Age'].min(skipna=False)
+"It gives the minimum age, but if there's even one missing value, it returns NaN."
+________________________________________
+3. df.loc[:, 'Annual Income (k$)'].std()
+"It returns the standard deviation of annual income, which shows how much the income values vary from the average."
+________________________________________
+df.groupby(['Genre'])['Age'].mean()
+"It gives the + — like average age of males and average age of females."
+________________________________________
+ 2. df.groupby(['Genre'])['Age'].median()
+"It shows the middle age (median) for each gender group."
+________________________________________
+3. df.groupby(['Genre'])['Age'].std()
+"It gives the standard deviation of age within each gender group — showing how spread out the ages are in each group."
+________________________________________from sklearn import preprocessing
+"This imports the preprocessing module from scikit-learn."
+________________________________________
+enc = preprocessing.OneHotEncoder()
+"We create an object of OneHotEncoder, which is used to convert categorical data into binary (0/1) form."
+________________________________________
+enc_df = pd.DataFrame(enc.fit_transform(df[['Genre']]).toarray())
+"We apply OneHotEncoder on the 'Genre' column and convert the result into a DataFrame of 0s and 1s."
+•	For example, if Genre has values like Male and Female, it creates two columns:
+o	One column for Male (1 if Male, 0 otherwise)
+o	One column for Female (1 if Female, 0 otherwise)
+________________________________________
+enc_df
+"This displays the new DataFrame with the encoded columns."
+________________________________________
+df1 = df.join(enc_df)
+Combines df and enc_df into a new DataFrame df1.
+________________________________________
+del df1['Genre']
+Deletes the original Genre column from df1 because it's now encoded.
+________________________________________
+iris=pd.read_csv("C:/Users/SHRAVANI/Downloads/IRIS (1).csv")
+iris
+Loads the IRIS dataset and shows it.
+________________________________________
+irisSet = (iris['species']== 'Iris-setosa')
+Creates a Boolean filter for rows where species is 'Iris-setosa'.
+________________________________________
+print('Iris-setosa')
+print(iris[irisSet].describe())
+Prints a title and shows descriptive stats for only Iris-setosa samples.
+________________________________________
+1. What is the difference between df.info() and df.describe()?
+df.info() gives a concise summary of the DataFrame including data types, non-null values, and memory usage.
+df.describe() provides statistical summary (count, mean, std, min, max, etc.) for numeric columns.
+________________________________________
+2. What does numeric_only=True do in statistical functions like mean()?
+It tells pandas to compute the operation only on numeric columns, ignoring strings or object types to avoid errors.
+________________________________________
+3. What is the purpose of using axis=1 in df.mean(axis=1)?
+It calculates the mean row-wise, i.e., across columns for each individual row.
+________________________________________
+4. What will happen if your dataset contains non-numeric columns and you call df.mean() without numeric_only=True?
+A TypeError will occur because pandas can't compute the mean on non-numeric (string) columns.
+________________________________________
+5. What does skipna=False mean in functions like df.max(skipna=False)?
+It tells pandas not to ignore missing values (NaN). If NaN is present, the result will also be NaN.
+________________________________________
+6. What are measures of central tendency? Which functions in your code represent them?
+They describe the center of a data distribution. Functions used:
+mean() – average
+median() – middle value
+mode() – most frequent value
+________________________________________
+7. What is standard deviation and how is it interpreted in this dataset?
+Standard deviation (std()) measures how spread out the numbers are from the mean. A high std means more variability.
+________________________________________
+8. How do mean(), median(), and mode() differ?
+•	mean: sum / count (affected by outliers)
+•	median: middle value (robust to outliers)
+•	mode: most frequent value (used in categorical data too)
+________________________________________
+10. Explain the use of groupby() in df.groupby(['Genre'])['Age'].mean()
+It groups data by Genre and calculates the average Age for each gender separately (e.g., mean age for Males and Females).
+________________________________________
+11. What is one-hot encoding and why is it used?
+It converts categorical variables into binary columns (0s and 1s) so that they can be used in ML models.
+________________________________________
+12. After encoding, why did you delete the original Genre column?
+To avoid redundancy and multicollinearity. The original column is no longer needed once encoded.
+________________________________________
+13. What is the difference between LabelEncoder and OneHotEncoder?
+•	LabelEncoder: assigns unique integers to each category (not good for non-ordinal data).
+•	OneHotEncoder: creates binary columns for each category (safer for nominal data like gender, city, etc.).
+________________________________________
+14. How do you filter the dataset to include only Iris-setosa?
+Using a Boolean mask:
+irisSet = (iris['species'] == 'Iris-setosa')
+iris[irisSet]
+________________________________________
+15. What does iris[irisSet].describe() return?
+It gives a statistical summary (count, mean, std, min, max, etc.) for only the Iris-setosa subset.
+________________________________________
+16. How would you compare Iris-setosa and Iris-versicolor using statistical functions?
+Create two Boolean masks for both species and use .describe() or .mean() separately for both.
+________________________________________
+17. What error do you get if a column has strings and you run .mean()? How do you fix it?
+You get TypeError: Could not convert string to numeric. Fix it by passing numeric_only=True.
+________________________________________
+18. How would you handle missing values in this dataset?
+Use:
+df.fillna(value)
+df.dropna()
+df['column'].fillna(df['column'].mean())
+________________________________________
+19. Why did you use .toarray() after encoding? What if you don’t use it?
+OneHotEncoder returns a sparse matrix. .toarray() converts it into a dense numpy array suitable for DataFrame.
+________________________________________
+20. What would happen if you ran .describe() on a categorical column?
+It will return:
+count
+unique values
+top (most frequent)
+frequency of the top value
+________________________________________
+What is the difference between Descriptive and Inferential Statistics?
+ Descriptive statistics summarizes the data at hand using measures like mean, median, and standard deviation, without inferring or generalizing beyond the dataset. Inferential Statistics is when we use a small sample of data to learn about a larger group (the population).
+
+What are Measures of Central Tendency? Can you explain them with an example?
+Expected Answer: Measures of central tendency include mean, median, and mode. The mean is the average, the median is the middle value, and the mode is the most frequent value. For example, in the data {1, 2, 3, 3, 5}, the mean is 2.8, the median is 3, and the mode is 3.
+How does standard deviation relate to variance?
+Standard deviation is the square root of variance. While variance measures how far data points are spread out from the mean
+________________________________________
+What is skewness, and how do you interpret positive or negative skew?
+ Skewness measures the asymmetry of a distribution. It can either be positive, negative or undefined. Positive skew means the tail is longer on the right side, and negative skew means the tail is longer on the left side. If skewness is 0, the distribution is symmetrical.
+What is the difference between range and variance?
+The range is the difference between the maximum and minimum values, while variance measures the spread of data points around the mean, taking into account all data points.
+________________________________________
+Types of Variables:
+What is the difference between categorical and numerical variables?
+Expected Answer: Categorical variables represent categories or labels, such as "gender" or "color." Numerical variables represent quantities that can be measured, such as height or age.
+Can you explain the difference between discrete and continuous variables with examples?
+Expected Answer: A discrete variable can only take specific, distinct values, like the number of children (0, 1, 2, etc.), whereas a continuous variable can take any value within a range, like height (1.7 meters, 1.72 meters, etc.).
+What is the difference between nominal and ordinal variables?
+Expected Answer: Nominal variables have categories without any order (e.g., colors: red, blue, green), while ordinal variables have categories with a meaningful order (e.g., rankings: first, second, third).
+________________________________________
+How do you compute the mean, median, and mode of a specific column in a pandas DataFrame?
+Expected Answer:
+Mean: df['column_name'].mean()
+Median: df['column_name'].median()
+Mode: df['column_name'].mode()
+What is the use of groupby in pandas, and how do you use it to compute statistics?
+ groupby is used to group data based on a categorical variable and then apply aggregate functions like mean, sum, etc., to each group. For example, df.groupby(['Genre'])['Age'].mean() computes the average age for each genre.
+Can you explain the axis parameter in functions like mean(), std(), etc., in pandas?
+Expected Answer: The axis parameter determines whether the operation is applied row-wise or column-wise:
+axis=0 operates column-wise (default).
+axis=1 operates row-wise.
+________________________________________
+What kind of statistical analysis can you perform on the Iris dataset?
+ You can compute measures of central tendency (mean, median) and measures of variability (variance, standard deviation) for each species of the Iris dataset. You can also perform group-wise analysis using groupby to compare statistics between species.
+How do you handle categorical variables in the dataset, like 'Species' in the Iris dataset?
+ Categorical variables like 'Species' can be handled using methods like one-hot encoding to convert them into numerical values. For example, using OneHotEncoder from sklearn to transform the 'Species' column into separate binary columns for each category.
+What is the purpose of using the describe() function in pandas?
+Expected Answer: The describe() function provides a summary of statistics for numerical columns, including count, mean, standard deviation, min, max, and quartiles.
+________________________________________
+Can you explain how to replace missing values in a pandas DataFrame?
+Expected Answer: Missing values can be replaced using df.fillna(value), where value is the value to fill the missing entries. Alternatively, you can use df.dropna() to remove rows with missing values.
+How would you handle outliers in a dataset?
+Outliers can be handled by removing them or replacing them with a value (such as the mean or median). One common method to detect outliers is using Z-scores or IQR (Interquartile Range).
+Can you explain how you would rename columns in a pandas DataFrame?
+Expected Answer: Columns can be renamed using the df.rename(columns={old_name: new_name}) method, where old_name is the current column name and new_name is the new column name.
+________________________________________
+Explain Measures of Central Tendency with examples.
+Question: What are measures of central tendency, and why are they important?
+Answer: Measures of central tendency help summarize a set of data by identifying the central point within the distribution of the data. The three common measures are:
+Mean: The arithmetic average of all values. It's calculated by summing all the data points and dividing by the number of points.
+Example: In the dataset [17, 16, 21, 18, 15], the mean is (17+16+21+18+15)/5 = 17.4.
+Median: The middle value when the data points are arranged in order. If the number of values is even, it's the average of the two middle values.
+Example: For [11, 15, 16, 17, 17, 18], the median is (17+17)/2 = 17.
+Mode: The most frequent value(s) in the dataset. There can be one mode (unimodal), more than one (bimodal or multimodal), or no mode.
+Example: In the dataset [17, 16, 21, 18, 15, 17, 21, 19, 11, 23], the mode is 17 and 21 (bimodal).
+What are the different types of variables? Explain with examples.
+Answer: Variables can be broadly classified into:
+Categorical Variables: These represent categories or labels and can be further classified as:
+Nominal: Categories without any inherent order.
+Example: Gender (Male, Female), Color (Red, Blue, Green).
+Ordinal: Categories with a natural order, but without a specific scale of difference.
+Example: Education level (High school, Bachelor's, Master's).
+Numerical (Quantitative) Variables: These represent measurable quantities and can be:
+Discrete: Countable values with a finite range.
+Example: Number of children, shoe size.
+Continuous: Values that can take any real number within a range.
+Example: Height, weight, temperature.
+Which method is used to summarize a dataframe? Write the code.
+Answer: The describe() method is commonly used to summarize a dataframe. It provides summary statistics (count, mean, standard deviation, min, max, and percentiles) for numerical columns.
+Code:
+import pandas as pd
+df = pd.read_csv("your_dataset.csv")
+summary = df.describe()  # This gives summary statistics
+print(summary)
+This will display basic statistical details like mean, standard deviation, min, max, and percentiles for all numeric columns in the dataframe.
+Question: How are the mean, median, mode, and standard deviation calculated in your dataset?
+Answer:
+Mean: The mean() function calculates the average of the values in a column. In the code, df.mean() calculates the mean of all columns, and df.loc[:, 'Age'].mean() calculates the mean specifically for the Age column.
+Median: The median() function calculates the middle value of a sorted dataset. df.median() gives the median for all columns, and df.loc[:, 'CustomerID'].median() calculates the median specifically for the CustomerID column.
+Mode: The mode() function returns the most frequent value in the dataset. df.loc[:, 'Age'].mode() gives the mode of the Age column.
+Standard Deviation: The std() function calculates the spread of the data around the mean. df.loc[:, 'Age'].std() gives the standard deviation for the Age column.
+Question: What does the axis=1 parameter do in the functions mean() and std()?
+ The axis=1 parameter tells the function to calculate the statistic row-wise instead of column-wise. So, df.mean(axis=1) calculates the mean of each row, while df.std(axis=1) calculates the standard deviation for each row.
+Question: Why did you rename the column 'Annual Income k$' to 'Income' in the dataframe?
+Answer: Renaming columns is important for clarity and consistency in the dataset. It ensures that the column names are more concise and easier to work with in further analysis or when performing operations on the dataset.
+Question: Can you explain what OneHotEncoding is and why it's used for the 'Genre' column in this code?
+Answer: OneHotEncoding is a technique used to convert categorical variables into a format that can be provided to machine learning algorithms, specifically by creating binary columns for each category. In this code, preprocessing.OneHotEncoder() is used to convert the 'Genre' column into binary columns where each row is represented by a '1' or '0' depending on whether it belongs to that genre category.
+Question: What does the groupby() function do in the code, specifically in df.groupby(['Genre'])['Age'].mean()?
+Answer: The groupby() function in Pandas is used to group the data based on certain column(s). In the example df.groupby(['Genre'])['Age'].mean(), the data is grouped by the 'Genre' column, and then the mean age for each genre group is calculated. This allows for an aggregated view of the dataset based on categories (e.g., average age for each genre).
+Question: What does the 'Mall_Customers.csv' dataset contain, and which columns are being used?
+Answer: The 'Mall_Customers.csv' dataset contains customer data from a shopping mall. The relevant columns used here include:
+Age: Numeric data representing the age of customers.
+CustomerID: Identifier for each customer (numeric).
+Annual Income (k$): Numeric data representing the annual income of customers in thousands of dollars.
+Genre: Categorical data (typically 'Male' or 'Female') representing the gender of the customer.
+Question: What does the describe() function do when applied to the Iris dataset?
+Answer: The describe() method provides summary statistics for each numeric column in the dataset, such as count, mean, standard deviation, minimum, and maximum values, as well as the quartiles (25th, 50th, and 75th percentiles). In this code, irisSet = (iris['species'] == 'Iris-setosa') filters the rows for the 'Iris-setosa' species, and then iris[irisSet].describe() is used to display the summary statistics for the numerical columns (e.g., Sepal_Length, Sepal_Width, Petal_Length, Petal_Width) for that specific species.
+Question: What will the output of iris[irisSet].describe() contain?
+Answer: The output will display summary statistics for the numeric columns in the dataset (e.g., Sepal_Length, Sepal_Width, Petal_Length, Petal_Width) for the rows where the species is 'Iris-setosa'. It includes the count of non-null entries, mean, standard deviation, minimum, maximum, and quartiles (25%, 50%, 75%) for each of these columns.
+
