@@ -14,24 +14,286 @@ dataset=pd.read_csv('C:/Users/SHRAVANI/Downloads/train.csv')
 dataset.info()
 dataset
 sns.distplot(dataset['Fare'])
-sns.distplot(dataset['Fare'], kde=False)
-sns.distplot(dataset['Fare'], kde=False, bins=10)
-sns.jointplot(x='Age', y='Fare', data=dataset)
-sns.pairplot(dataset)
-sns.rugplot(dataset['Fare'])
+sns.distplot(dataset['Fare'], kde=False)# kde=False removes the smooth curve
+sns.distplot(dataset['Fare'], kde=False, bins=10)# column with 10 bins and without KDE curve
+sns.jointplot(x='Age', y='Fare', data=dataset)#visualize the relationship between Age and Fare columns
+sns.pairplot(dataset)#relationships between each pair of features
+sns.rugplot(dataset['Fare'])# adds small vertical lines
 
-sns.barplot(x='Sex', y='Fare', data=dataset)
+sns.barplot(x='Sex', y='Fare', data=dataset)#average fare for each sex category using vertical bars
 import numpy as np
 
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-sns.barplot(x='Sex', y='Age', data=dataset, estimator=np.std)
-sns.countplot(x='Fare', data=dataset)
+sns.barplot(x='Sex', y='Age', data=dataset, estimator=np.std)#plots bars showing std deviation of age for each sex group instead of average
+sns.countplot(x='Fare', data=dataset)#count the occurrences of each value in the Fare column. 
 sns.boxplot(x='Sex', y='Age', data=dataset)
-sns.boxplot(x='Sex', y='Age', data=dataset, hue="Survived")
+sns.boxplot(x='Sex', y='Age', data=dataset, hue="Survived")#shows distribution of age for each sex, with separate box plots based on whether passenger survived or not
 sns.violinplot(x='Sex', y='Age', data=dataset, hue='Survived')
-sns.stripplot(x='Sex', y='Age', data=dataset)
-sns.histplot(data=dataset,x='Fare',y='Survived')
+sns.stripplot(x='Sex', y='Age', data=dataset)#to display individual data points for Age for each sex
+sns.histplot(data=dataset,x='Fare',y='Survived')#displays the relationship between Fare and Survived
 
+
+
+________________________________________
+Import Libraries:
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+pandas: Used for data manipulation and analysis (loading datasets).
+numpy: Supports large, multi-dimensional arrays and matrices.
+matplotlib.pyplot: A plotting library for creating static, animated, and interactive visualizations.
+seaborn: A statistical data visualization library built on top of Matplotlib.
+________________________________________
+Load Dataset:
+dataset = pd.read_csv('/content/train.csv')
+dataset
+Loads the dataset from a CSV file (train.csv) into a DataFrame (dataset) using pandas.read_csv().
+________________________________________
+Dataset Information:
+dataset.info()
+Displays basic information about the dataset, such as the number of entries, column names, non-null values, and data types of each column.
+________________________________________
+Dataset Descriptive Statistics:
+dataset.describe()
+Displays summary statistics for the numeric columns in the dataset (e.g., mean, standard deviation, min, max, quartiles).
+________________________________________
+Check Data Types:
+dataset.dtypes
+Displays the data types of each column in the dataset.
+________________________________________
+Missing Values Check:
+dataset.isnull().sum()
+Checks for missing values in the dataset. This will return the number of missing (null) values for each column.
+________________________________________
+Reload Dataset (Redundant Step):
+dataset = pd.read_csv('/content/train.csv')
+dataset.info()
+dataset
+Reloads the dataset and displays its info again (this step seems redundant, as it was already done before).
+________________________________________
+Distribution Plot (Fare):
+sns.distplot(dataset['Fare'])
+Creates a distribution plot (histogram) for the Fare column. This visualizes the frequency distribution of ticket fares for passengers.
+________________________________________
+Distribution Plot without KDE:
+sns.distplot(dataset['Fare'], kde=False)
+Creates a histogram for the Fare column without displaying the Kernel Density Estimate (KDE). The kde=False removes the smooth curve.
+________________________________________
+Distribution Plot with Bins:
+sns.distplot(dataset['Fare'], kde=False, bins=10)
+Creates a histogram with 10 bins for the Fare column. The number of bins controls how finely or coarsely the data is divided.
+________________________________________
+Joint Plot (Age vs Fare):
+sns.jointplot(x='Age', y='Fare', data=dataset)
+Creates a joint plot to visualize the relationship between Age and Fare columns. This includes scatterplots and distributions for both variables.
+________________________________________
+Pair Plot:
+sns.pairplot(dataset)
+Creates pairwise plots for all combinations of numeric and Boolean columns in the dataset. It visualizes the relationships between each pair of features.
+________________________________________
+Rug Plot (Fare):
+sns.rugplot(dataset['Fare'])
+Creates a rug plot for the Fare column. It displays small vertical ticks (rug marks) on the x-axis for each data point, showing the distribution of data.
+________________________________________
+Bar Plot (Sex vs Fare):
+sns.barplot(x='Sex', y='Fare', data=dataset)
+Creates a bar plot to show the mean fare (y='Fare') for each sex category (x='Sex'). The plot visualizes the average fare for male and female passengers.
+________________________________________
+Bar Plot (Sex vs Age with Standard Deviation):
+sns.barplot(x='Sex', y='Age', data=dataset, estimator=np.std)
+Creates a bar plot to display the standard deviation of Age for male and female passengers (estimator=np.std). It shows how much variation there is in the age of male and female passengers.
+________________________________________
+Count Plot (Fare):
+sns.countplot(x='Fare', data=dataset)
+Creates a count plot to count the occurrences of each value in the Fare column. This is useful for visualizing the frequency distribution of fare values.
+________________________________________
+Box Plot (Sex vs Age):
+sns.boxplot(x='Sex', y='Age', data=dataset)
+Creates a box plot to visualize the distribution of Age for each Sex category. It shows the median, quartiles, and potential outliers for age by sex.
+________________________________________
+Box Plot (Survived vs Fare):
+sns.boxplot(x='Survived', y='Fare', data=dataset)
+shows the distribution of age for each sex using a box plot, highlighting the median, quartiles, and outliers."________________________________________
+Box Plot with Hue (Sex and Age with Survived):
+sns.boxplot(x='Sex', y='Age', data=dataset, hue="Survived")
+Creates a box plot to show the distribution of Age for male and female passengers (x='Sex'), with the hue indicating whether passengers survived or not. This allows comparing age distributions for survivors and non-survivors within each sex category.
+________________________________________
+Violin Plot (Sex vs Age with Hue Survived):
+sns.violinplot(x='Sex', y='Age', data=dataset, hue='Survived')
+Creates a violin plot to display the distribution of Age for male and female passengers, with the hue indicating survival. Violin plots combine aspects of box plots and density plots, providing more details about the distribution.
+________________________________________
+Strip Plot (Sex vs Age):
+sns.stripplot(x='Sex', y='Age', data=dataset)
+Creates a strip plot to display individual data points for Age for each sex. Each point is plotted along the x-axis, which makes it easier to see how data points are distributed.
+________________________________________
+Histogram with Two Variables (Fare vs Survived):
+sns.histplot(data=dataset, x='Fare', y='Survived')
+Creates a histogram that displays the relationship between Fare and Survived. It helps visualize how the distribution of fares varies for survivors and non-survivors.
+________________________________________
+Summary:
+Distribution Plots: Visualize the distribution of a single variable (e.g., Fare).
+Joint Plots: Show relationships between two continuous variables.
+Pair Plots: Show pairwise relationships across multiple variables.
+Rug Plots: Display small ticks to represent individual data points.
+Bar Plots: Show relationships between categorical and numeric variables.
+Box Plots: Display statistical summaries of a dataset (e.g., quartiles, outliers).
+Violin Plots: Show data distribution with more detail than a box plot.
+Strip Plots: Display individual data points along a categorical axis.
+Count Plots: Show the frequency of categorical values.________________________________________________________________________________
+Q1. What is the purpose of dataset.info() and dataset.describe()?
+A:
+dataset.info() shows the structure of the dataset including column names, non-null counts, and data types.
+dataset.describe() provides statistical summary (count, mean, std, min, max, quartiles) for numeric columns.
+________________________________________
+Q2. How do you check for missing values in your dataset?
+A:
+Using dataset.isnull().sum() which gives the total number of missing values in each column.
+________________________________________
+Q3. What does dataset.dtypes return?
+A:
+It returns the data type (int, float, object, etc.) of each column in the dataset.
+Q4. What is the use of sns.distplot()? Why use kde=False?
+A:
+sns.distplot() shows the distribution (histogram + optional KDE line) of a numeric variable.
+kde=False removes the Kernel Density Estimation line, showing only the histogram bars.
+________________________________________
+Q5. What are bins in a histogram? How do you customize them?
+A:
+Bins are intervals that group data values in a histogram.
+You can change the number of bins using bins=10 to see more or fewer intervals.
+________________________________________
+Q6. What does sns.jointplot(x='Age', y='Fare', data=dataset) show?
+A:
+It shows a scatterplot between Age and Fare, along with histograms for both variables on the margins.
+________________________________________
+Q7. What is a pairplot() used for?
+A:
+It shows pairwise relationships (scatterplots + histograms) for all numerical variables in the dataset.
+________________________________________
+Q8. What is a rug plot? When would you use sns.rugplot()?
+A:
+It plots small vertical lines along the x-axis representing individual data points. It’s useful to see data density.
+________________________________________
+Q9. What does sns.barplot(x='Sex', y='Fare', data=dataset) represent?
+A:
+It shows the average fare for each gender. The bar height is the mean by default.
+________________________________________
+Q10. How do you calculate standard deviation instead of mean in a barplot?
+A:
+Use estimator=np.std inside the sns.barplot() to show standard deviation instead of mean.
+________________________________________
+Q11. What does a boxplot show?
+A:
+It shows the median, quartiles, and outliers for a numeric variable grouped by a categorical variable.
+Example:
+sns.boxplot(x='Sex', y='Age', data=dataset) shows age distribution for males and females.
+________________________________________
+Q12. How is hue='Survived' useful in boxplot or violinplot?
+A:
+It splits each category (e.g., Male/Female) into subgroups (e.g., Survived = 0 or 1) for comparison.
+________________________________________
+Q13. What additional information does a violinplot provide over a boxplot?
+A:
+It shows the density distribution of the data along with the summary statistics (like a boxplot).
+________________________________________
+Q14. What does a stripplot() show?
+A:
+It displays individual data points with some jitter, useful for small datasets to see exact values.
+________________________________________
+Q15. Explain the use of sns.histplot(data=dataset, x='Fare', y='Survived').
+A:
+This creates a 2D histogram (heatmap-style) of fare vs. survived, showing how fare relates to survival.________________________________________
+Q16. From the violin plot of Age vs. Survived by Sex, what did you observe?
+A:
+Younger males had higher survival rates. Female survivors had a narrower age range than non-survivors.
+________________________________________
+Q17. Why are visualizations important in data analysis?
+A:
+They help identify patterns, outliers, distributions, and relationships which are not obvious in raw data.________________________________________
+Q1. What is the aim of this assignment?
+A:
+To check how the price of the ticket (fare) for each Titanic passenger is distributed using a histogram, and to explore data patterns using Seaborn.
+________________________________________
+Q2. What is data visualization?
+A:
+Data visualization is the graphical representation of data to find trends, correlations, and outliers, making it easier to understand large datasets.
+________________________________________
+Q3. Why is Seaborn used in this assignment?
+A:
+Seaborn is used for statistical data visualization. It provides simpler syntax and more advanced features than Matplotlib, especially for exploring datasets.
+________________________________________
+Q4. What libraries are imported in this assignment and why?
+A:
+import pandas as pd       # for data handling
+import numpy as np        # for numerical operations
+import matplotlib.pyplot as plt  # for plotting
+import seaborn as sns     # for statistical visualizations________________________________________
+Q5. What is the Titanic dataset?
+A:
+It's a dataset of 891 passengers aboard the Titanic, containing details like name, age, gender, fare, class, and survival status.
+________________________________________
+Q6. How is the Titanic dataset loaded?
+A:
+dataset = pd.read_csv('/content/train.csv')
+________________________________________
+Q7. How do you check the structure of the dataset?
+A:
+By using dataset.info() to view column names, data types, and null values.
+________________________________________
+Q8. What is a histogram? Why is it used?
+A:
+A histogram is a bar graph representing the distribution of numeric data across intervals (bins). It’s used to visualize frequency distributions.
+________________________________________
+Q9. How do you plot a histogram of the 'Fare' column using Seaborn?
+A:
+sns.histplot(dataset['Fare'])
+________________________________________
+Q10. What does sns.histplot(dataset['Fare'], kde=False) do?
+A:
+It plots only the histogram without the kernel density estimation line (KDE), showing the frequency of fare values.
+________________________________________
+Q11. What are bins in a histogram?
+A:
+Bins divide the range of values into intervals. Each bar represents how many data points fall within that interval.
+________________________________________
+Q12. How do you increase or decrease the number of bins?
+A:
+By adding the bins parameter. Example: sns.histplot(dataset['Fare'], bins=20)
+________________________________________
+📉 Seaborn & Matplotlib Comparison
+________________________________________
+Q13. What is the difference between Matplotlib and Seaborn?
+A:
+Matplotlib	Seaborn
+Good for basic plots	Better for statistical plots
+More customizable	Easier and cleaner syntax
+Works well with arrays	Works directly with datasets
+Less visually appealing	Prettier default themes
+________________________________________
+Q14. What are some other Seaborn plots used for pattern discovery?
+A:
+sns.barplot() – mean value of a numeric column for each category
+sns.boxplot() – spread and outliers of a numeric column
+sns.pairplot() – pairwise relationships among numerical variables
+sns.violinplot() – distribution + density estimate
+sns.jointplot() – scatterplot + histogram combo
+sns.stripplot() – individual data points
+________________________________________
+Q15. What is %matplotlib inline used for?
+A:
+It ensures that plots are displayed inline in Jupyter Notebook or Colab outputs.
+________________________________________
+Q16. What does KDE mean in the context of a histogram?
+A:
+KDE stands for Kernel Density Estimation, which is a smooth curve that shows the probability distribution of a variable.________________________________________
+Q17. What conclusions can you draw from the Fare histogram?
+A:
+Most ticket fares are concentrated between 0–100. Few passengers paid very high fares, which may indicate first-class travel.
+________________________________________
+Q18. What is the use of visualization in this dataset?
+A:
+It helps us understand patterns like how fare varies, which gender survived more, how age affected survival, etc.
 
