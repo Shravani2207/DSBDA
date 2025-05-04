@@ -7,8 +7,8 @@ import seaborn as sns
 dataset=pd.read_csv("C:/Users/SHRAVANI/Downloads/train (1).csv")
 
 dataset.head()
-sns.boxplot(x='Sex', y='Age', data=dataset)
-sns.boxplot(x='Sex', y='Age', data=dataset, hue="Survived")
+sns.boxplot(x='Sex', y='Age', data=dataset)#to visualize the distribution of Age for each male and female 
+sns.boxplot(x='Sex', y='Age', data=dataset, hue="Survived")#differentiating between passengers who survived and those who didn't
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -18,7 +18,273 @@ from seaborn import load_dataset
 data = pd.read_csv('C:/Users/SHRAVANI/Downloads/train (1).csv')
 #tips dataset
 tips = load_dataset("tips")
-sns.boxplot(x='Survived', y='Fare', data=dataset)
+sns.boxplot(x='Survived', y='Fare', data=dataset)#show distribution Fare column for passengers who Survived = 1 vs those who did not Survived = 0 
 sns.boxplot(x='Sex', y='Age', data=dataset)
 sns.boxplot(x='Sex', y='Age', data=dataset)
+sns.boxplot(x='Survived', y='Fare', data=dataset)#for Survived vs Fare
+
+
+
+
+Import Libraries:
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+ Imports the necessary libraries:
+pandas: For data manipulation and analysis (reading data, handling data structures).
+numpy: For numerical computing (supporting large data structures like arrays).
+matplotlib.pyplot: For creating visualizations (static plots).
+seaborn: For statistical data visualization, built on top of Matplotlib.
+________________________________________
+Load Dataset:
+dataset = pd.read_csv('/content/train.csv')
+ Reads the dataset from a CSV file (train.csv) into a pandas DataFrame (dataset). This dataset could be related to the Titanic, where passengers' information like age, sex, survival status, etc., are stored.
+________________________________________
+Display First 5 Rows of Dataset:
+dataset.head()
+ Displays the first 5 rows of the dataset, allowing you to quickly view the data structure and understand what columns are present.
+________________________________________
+Create Box Plot (Sex vs Age):
+sns.boxplot(x='Sex', y='Age', data=dataset)
+ Creates a box plot to visualize the distribution of Age for each Sex (male and female). The box plot shows the following:
+Quartiles: The distribution is divided into four parts, showing the middle 50% of the data.
+Median: The middle value of the Age distribution for each gender (represented by a line in the middle of the box).
+Whiskers: The lines extending from the box showing the range of data, excluding outliers.
+Outliers: Data points that fall outside the whiskers are considered outliers and are plotted as individual dots.
+________________________________________
+Description of Box Plot:
+The box plot is used to display the distribution of categorical data (e.g., Sex) in terms of quartiles.
+Explanation of the box plot:
+First quartile (Q1): The 25th percentile (25% of the data points are below this value).
+Second quartile (Q2): The 50th percentile (or median).
+Third quartile (Q3): The 75th percentile (75% of the data points are below this value).
+Whiskers: The range from the first quartile to the third quartile (excluding outliers).
+Outliers: Values outside of this range, represented by individual dots.
+________________________________________
+Box Plot with Hue (Sex, Age, and Survival):
+sns.boxplot(x='Sex', y='Age', data=dataset, hue="Survived")
+ Creates a box plot for Sex vs Age, but this time, it uses the hue="Survived" parameter. This adds another layer to the visualization by differentiating between passengers who survived and those who didn't.
+This helps to analyze how the age distribution varies between male and female passengers based on their survival status.
+You can observe that younger male passengers had higher survival rates, and for females, the survival age range is different for those who survived versus those who did not.
+________________________________________
+Box Plot (Survived vs Fare):
 sns.boxplot(x='Survived', y='Fare', data=dataset)
+ Creates a box plot to show the distribution of the Fare column for passengers who survived (Survived = 1) vs those who did not survive (Survived = 0). This helps visualize whether there is any significant difference in the fare price between survivors and non-survivors.
+________________________________________
+Box Plot (Sex vs Age) (Repeated):
+sns.boxplot(x='Sex', y='Age', data=dataset)
+Creates a box plot again for Sex vs Age, similar to the earlier box plot. This will help further visualize the distribution of ages among male and female passengers.
+________________________________________
+Box Plot (Survived vs Fare) (Repeated):
+sns.boxplot(x='Survived', y='Fare', data=dataset)
+Creates a box plot again for Survived vs Fare. This is the same as in step 6 and helps further visualize the distribution of fares for survivors and non-survivors.
+________________________________________
+Explanation of Box Plot (General Description):
+# Boxplot summarizes data using the five-number summary: minimum, first quartile, median, third quartile, and maximum.
+# The "hue" parameter allows us to add another categorical variable for deeper insights into distributions.
+ Explanation of Box Plot Components:
+Five-number summary: Box plots are based on the five-number summary, which includes:
+Minimum: The smallest data point excluding outliers.
+First quartile (Q1): The median of the lower half of the dataset.
+Median (Q2): The middle value.
+Third quartile (Q3): The median of the upper half of the dataset.
+Maximum: The largest data point excluding outliers.
+Outliers: Points that are far from the quartiles and fall outside of the whiskers.
+________________________________________
+Additional Note on Box Plot Interpretation:
+Box plots are useful in identifying:
+Central tendency (the median line in the box).
+Spread (interquartile range between the first and third quartile).
+Outliers (dots outside the whiskers).
+________________________________________
+Summary of Visualizations:
+Box Plot: Visualizes the distribution of numerical data based on quartiles.
+Hue Parameter: Adds an additional layer of information (e.g., survival status) to understand how the distribution changes across categories.
+Repeated Plots: Repetition of the same plots is common for deeper insights or comparisons in different contexts.
+These plots and visualizations are valuable for exploratory data analysis (EDA) to understand the structure and distribution of your dataset before proceeding with more advanced analysis.
+
+
+Q1. What is the aim of this assignment?
+A:
+To plot a box plot showing the distribution of age with respect to each gender (sex) and survival status (survived) using the Titanic dataset.
+________________________________________
+Q2. What is a box plot?
+A:
+A box plot is a standardized way of displaying the distribution of a dataset based on five-number summary: minimum, first quartile (Q1), median (Q2), third quartile (Q3), and maximum. It also shows outliers.
+________________________________________
+Q3. What is the difference between a histogram and a box plot?
+A:
+Histogram	Box Plot
+Shows frequency distribution	Shows statistical summary (median, quartiles, outliers)
+Good for visualizing shape	Good for comparing groups
+Doesn't directly show outliers	Clearly shows outliers
+Q4. What dataset is used and how is it loaded?
+A:
+The Titanic dataset is used. It can be loaded using:
+dataset = pd.read_csv('/content/train.csv')
+________________________________________
+Q5. What libraries are used for this assignment?
+A:
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+________________________________________
+Q6. What is the purpose of %matplotlib inline?
+A:
+It ensures that plots are displayed directly below the code cell in Jupyter Notebook or Google Colab.
+________________________________________
+Q7. What is the column ‘survived’ in Titanic dataset?
+A:
+It is a binary column indicating survival status:
+0 = did not survive
+1 = survived
+________________________________________
+Q8. How do you create the box plot for this assignment using Seaborn?
+A:
+sns.boxplot(x='sex', y='age', hue='survived', data=dataset)
+________________________________________
+Q9. What does the hue='survived' parameter do in the box plot?
+A:
+It adds an extra category (survival status) to split the box plots, making it easy to compare survivors and non-survivors by gender.
+________________________________________
+Q10. What can you observe from the box plot?
+A:
+Females had higher survival rates compared to males.
+Median age of survivors is lower than that of non-survivors.
+Outliers show some very young and very old passengers.
+________________________________________
+Q11. Why is a box plot used here instead of a histogram?
+A:
+Because we want to compare the distribution of ages between different categories (sex + survival), and a box plot clearly shows medians and outliers for each group.
+Q12. What insights can be drawn from this box plot?
+A:
+Most females survived, regardless of age.
+Most males did not survive, though some younger males survived.
+There are outliers in both categories—very young children or older adults.
+________________________________________
+Q13. What if there are missing values in the age column?
+A:
+Box plots automatically skip null values, but it’s good practice to check and handle them using:
+dataset['age'].isnull().sum()
+________________________________________
+Q14. How can you fill missing values in the ‘age’ column?
+A:
+By using methods like:
+dataset['age'].fillna(dataset['age'].median(), inplace=True)
+________________________________________
+Q15. What does each part of a box plot represent?
+A:
+Center line → Median
+Box edges → Q1 (25%) and Q3 (75%)
+Whiskers → Data range excluding outliers
+Dots outside whiskers → Outliers
+________________________________________
+Q16. What is the advantage of using Seaborn over Matplotlib in this case?
+A:
+Seaborn has a built-in boxplot() function that allows easy grouping with hue, aesthetic styling, and integration with Pandas datasets.
+________________________________________
+Q17. What type of plot would you use if you wanted to visualize survival based on fare and class instead?
+A:
+A violin plot or a swarm plot would be suitable to see how fare and class affect survival.
+
+Q18. What is the conclusion of this assignment?
+A:
+Using a box plot, we observed the age distribution of passengers by gender and survival status. It helps identify age-related survival patterns and shows that females had better survival rates.
+Q1. What is a box plot?
+A:
+A box plot is a statistical graph that shows the distribution of a dataset using five-number summary: minimum, first quartile (Q1), median, third quartile (Q3), and maximum. It also helps identify outliers.
+________________________________________
+Q2. What does the sns.boxplot() function do in Seaborn?
+A:
+It creates a box plot for a categorical column (x-axis) against a numerical column (y-axis), allowing us to visualize the distribution, spread, and outliers of data.
+________________________________________
+Q3. What do the dots in a box plot represent?
+A:
+The dots are outliers, which are data points that fall outside the range defined by 1.5 times the interquartile range (IQR).
+________________________________________
+Q4. What libraries are used here for data visualization?
+A:
+matplotlib.pyplot for basic plotting
+seaborn for advanced, styled statistical plots
+________________________________________
+Q5. What dataset is used and how is it loaded?
+A:
+dataset = pd.read_csv('/content/train.csv')
+This loads the Titanic dataset which contains passenger details.
+________________________________________
+📊 BOX PLOT QUESTIONS (AGE, SEX, SURVIVED)
+________________________________________
+Q6. What does the following line do?
+sns.boxplot(x='Sex', y='Age', data=dataset)
+A:
+It creates a box plot showing the distribution of passenger ages for each gender.
+________________________________________
+Q7. What happens when we add the hue='Survived' parameter?
+A:
+sns.boxplot(x='Sex', y='Age', data=dataset, hue="Survived")
+This splits the box plots by survival status (0 = not survived, 1 = survived), allowing comparison of age distributions by gender and survival.
+________________________________________
+Q8. What insight can we draw from this plot?
+A:
+Younger males had better survival chances.
+Most female survivors were younger, and non-survivors had a wider age range.
+The plot helps visually confirm that females had a higher survival rate overall.
+Q9. What is IQR and how is it used in box plots?
+A:
+IQR (Interquartile Range) is calculated as Q3 - Q1, and it represents the middle 50% of data. Box plots use it to define the range of the data and detect outliers.
+________________________________________
+Q10. What is the 5-number summary in a box plot?
+A:
+Minimum (excluding outliers)
+Q1 – 25th percentile
+Median – 50th percentile
+Q3 – 75th percentile
+Maximum (excluding outliers)
+________________________________________
+Q11. What does this box plot indicate about the female passengers' ages?
+A:
+25% are aged roughly below 22–23 (Q1)
+50% are between 23 and 37 (Q2 and Q3)
+Outliers appear above 65
+________________________________________
+Q12. What is the difference between sns.boxplot(x='Sex', y='Age') and sns.boxplot(x='Survived', y='Fare')?
+A:
+First shows age distribution by gender
+Second shows fare distribution by survival status
+________________________________________
+Q13. What is the purpose of plotting sns.boxplot(x='Survived', y='Fare', data=dataset)?
+A:
+To compare fare paid by passengers who survived versus those who did not. It helps us see if paying higher fare increased survival chances (usually yes, due to class).
+________________________________________
+Q14. What are outliers in the context of Titanic’s fare or age columns?
+A:
+Fare: Very expensive tickets like those over $500
+Age: Passengers aged very high (like over 80) or very young (under 1 year)
+
+________________________________________
+Q15. What is the difference between Matplotlib and Seaborn?
+A:
+Matplotlib	Seaborn
+Low-level plotting library	High-level statistical plotting library
+Needs more code for styling	Easier to use with better styling
+Great for basic plots	Great for grouped and statistical plots like box, violin, etc.
+________________________________________
+Q16. What dataset does load_dataset("tips") load?
+A:
+It loads a sample dataset called "tips" from Seaborn, which contains data about tips received by restaurant staff.
+________________________________________
+Q17. Why do we repeat the line sns.boxplot(x='Sex', y='Age', data=dataset) multiple times?
+A:
+It's likely done for demonstration purposes or to test styling and visualization consistency.
+________________________________________
+Q18. How can we make the box plots visually better?
+A:
+Use palette to change colors
+Add title and labels using Matplotlib
+Combine with other plots like violin or swarm plots for more detail
+
+
+
