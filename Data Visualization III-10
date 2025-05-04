@@ -1,11 +1,11 @@
 import numpy as np
 import pandas as pd
 df = pd.read_csv("C:/Users/SHRAVANI/Downloads/data10.csv")
-df.columns = ["col1","col2","col3","col4","col5"]
+df.columns = ["col1","col2","col3","col4","col5"]#This line assigns new names to columns in dataset
 df.head()
 df.columns
 
-column = len(list(df))
+column = len(list(df))#counts the number of columns in the dataset
 column
 df.info()
 df.describe()
@@ -13,8 +13,84 @@ import seaborn as sns
 import matplotlib
 import matplotlib.pyplot as plt
 %matplotlib inline
-fig, axes = plt.subplots(2, 2, figsize=(16, 8))
+fig, axes = plt.subplots(2, 2, figsize=(16, 8))#Creates 2x2 grid of subplots with figure size of 16x8 inches.
 
+
+axes[0,0].set_title("Distribution of First Column")#a histogram is plotted for each column (col1, col2, col3, col4)
+axes[0,0].hist(df["col1"]);
+
+axes[0,1].set_title("Distribution of Second Column")#The title is set using set_title().
+axes[0,1].hist(df["col2"]);
+
+axes[1,0].set_title("Distribution of Third Column")
+axes[1,0].hist(df["col3"]);
+
+axes[1,1].set_title("Distribution of Fourth Column")
+axes[1,1].hist(df["col4"]);
+data_to_plot = [df["col1"],df["col2"],df["col3"],df["col4"]]#This prepares list of numerical columns to be plotted in box plot
+
+sns.set_style("whitegrid")#Sets background style for plot to have white grid.
+# Creating a figure instance
+fig = plt.figure(1, figsize=(12,8))#Creates new figure with a size of 12x8 inches
+
+# Creating an axes instance
+ax = fig.add_subplot(111)#Adds a single subplot to the figure.
+
+# Creating the boxplot
+bp = ax.boxplot(data_to_plot)#Plots box plot for all selected columns combined into one plot.
+
+sns.boxplot(x='col1', y='col2', data=df)#Creates a box plot comparing col1 vs. col2
+sns.boxplot(x='col3', y='col4', data=df)#Creates a box plot comparing col3 vs. col4
+
+
+
+
+________________________________________
+Importing Libraries:
+import numpy as np
+import pandas as pd
+numpy: A numerical computing library used to perform operations on large arrays and matrices, such as calculating unique values.
+pandas: A library for data manipulation and analysis, particularly useful for working with tabular data in the form of DataFrames.
+________________________________________
+Reading the Dataset:
+df = pd.read_csv("data10.csv")
+This line reads the data from a CSV file named data10.csv and loads it into a pandas DataFrame (df).
+The data will likely be tabular, with rows representing samples and columns representing features.
+________________________________________
+Renaming Columns:
+df.columns = ["col1","col2","col3","col4","col5"]
+This line assigns new names to the columns in the dataset, i.e., col1, col2, col3, col4, and col5.
+This makes the column names more readable or easier to refer to in the code.
+________________________________________
+Viewing the First Few Rows:
+df.head()
+This displays the first 5 rows of the DataFrame (df), allowing you to inspect the dataset and understand its structure and content.
+________________________________________
+Counting Columns:
+column = len(list(df))
+column
+len(list(df)) counts the number of columns in the dataset.
+list(df) converts the DataFrame into a list of column names.
+The result, stored in the column variable, will be the number of columns in the dataset.
+________________________________________
+Checking Data Types and Features:
+df.info():
+This command provides information about the DataFrame, including the number of entries, column names, data types of each column, and whether there are any missing values.
+It helps to understand the types of data present (e.g., numeric, object) in each column.
+________________________________________
+Displaying Unique Values for col5:
+np.unique(df["col5"])
+This line uses numpy to find the unique values in the col5 column.
+It's useful to check if col5 contains categorical or repeated data.
+________________________________________
+Summary Statistics of the Dataset:
+df.describe()
+This line generates summary statistics for the numerical columns in the DataFrame.
+It provides details like count, mean, standard deviation, minimum, 25th percentile (Q1), median (50th percentile), 75th percentile (Q3), and maximum.
+It helps understand the distribution and range of the numeric data.
+________________________________________
+Creating Histograms for Each Feature:
+fig, axes = plt.subplots(2, 2, figsize=(16, 8))
 
 axes[0,0].set_title("Distribution of First Column")
 axes[0,0].hist(df["col1"]);
@@ -27,17 +103,235 @@ axes[1,0].hist(df["col3"]);
 
 axes[1,1].set_title("Distribution of Fourth Column")
 axes[1,1].hist(df["col4"]);
+plt.subplots(2, 2, figsize=(16, 8)): Creates a 2x2 grid of subplots with a figure size of 16x8 inches.
+For each subplot (axes[0,0], axes[0,1], axes[1,0], axes[1,1]), a histogram is plotted for each column (col1, col2, col3, col4).
+The title is set using set_title().
+hist(df["colX"]): Creates the histogram for the corresponding column (colX), showing the distribution of values in the dataset.
+________________________________________
+Creating a Box Plot for All Features:
 data_to_plot = [df["col1"],df["col2"],df["col3"],df["col4"]]
 
 sns.set_style("whitegrid")
-# Creating a figure instance
 fig = plt.figure(1, figsize=(12,8))
-
-# Creating an axes instance
 ax = fig.add_subplot(111)
 
-# Creating the boxplot
 bp = ax.boxplot(data_to_plot)
-
+data_to_plot = [df["col1"], df["col2"], df["col3"], df["col4"]]: This prepares a list of the numerical columns to be plotted in the box plot.
+sns.set_style("whitegrid"): Sets the background style for the plot to have a white grid.
+fig = plt.figure(1, figsize=(12,8)): Creates a new figure with a size of 12x8 inches.
+ax = fig.add_subplot(111): Adds a single subplot to the figure.
+bp = ax.boxplot(data_to_plot): Plots a box plot for all the selected columns (features) combined into one plot.
+________________________________________
+Creating Box Plots for Pairwise Features:
 sns.boxplot(x='col1', y='col2', data=df)
 sns.boxplot(x='col3', y='col4', data=df)
+These two lines create pairwise box plots for different pairs of features.
+sns.boxplot(x='col1', y='col2', data=df): Creates a box plot comparing col1 vs. col2.
+sns.boxplot(x='col3', y='col4', data=df): Creates a box plot comparing col3 vs. col4.
+The x and y parameters represent the columns to be compared, while data=df tells the plotting function which DataFrame to use.
+________________________________________
+Understanding Box Plot Outliers (Explanation):
+# Explanation in comments:
+# Observing the interquartile distance for the box plot to detect outliers.
+# Outliers are points that lie beyond the range of (third quartile + interquartile distance).
+The interquartile range (IQR) is the difference between the 75th percentile (Q3) and the 25th percentile (Q1).
+Outliers are defined as values that lie beyond the range:
+Upper bound = Q3 + (1.5 * IQR)
+Lower bound = Q1 - (1.5 * IQR)
+Any data points that fall outside these bounds are considered outliers.
+________________________________________
+Summary of the Code and Visualizations:
+Histograms are created to visualize the distribution of each feature.
+Box plots are used to visualize the spread and detect outliers in the features.
+By setting up box plots for each feature and pairwise comparisons, you can compare how different columns relate to each other and identify data points that are unusual or extreme (outliers).
+
+________________________________________
+Q1. What is the aim of this assignment?
+A:
+The aim is to perform data visualization on the Iris flower dataset, including listing feature types, plotting histograms and box plots, and identifying outliers.
+________________________________________
+Q2. What is the Iris dataset?
+A:
+The Iris dataset is a classic multivariate dataset that contains 150 samples of iris flowers from three species (Setosa, Versicolor, Virginica). Each sample includes 4 numeric features: sepal length, sepal width, petal length, and petal width.
+________________________________________
+Q3. What are the features in the Iris dataset and their types?
+A:
+Feature	Type
+SepalLengthCm	Numeric
+SepalWidthCm	Numeric
+PetalLengthCm	Numeric
+PetalWidthCm	Numeric
+Species	Nominal (categorical)
+________________________________________
+Q4. What is a histogram?
+A:
+A histogram is a graphical representation showing the distribution of numerical data. It uses bars to show the frequency of observations within certain ranges (bins).
+________________________________________
+Q5. How do you plot a histogram in Python?
+A:
+Using Matplotlib:
+plt.hist(data['SepalLengthCm'], bins=10)
+plt.title('Histogram of Sepal Length')
+plt.xlabel('Sepal Length')
+plt.ylabel('Frequency')
+________________________________________
+Q6. Why are histograms useful?
+A:
+Histograms help visualize data distribution, identify skewness, central tendency, and detect possible outliers.
+________________________________________
+Q7. What is a box plot and what does it represent?
+A:
+A box plot shows the 5-number summary of a dataset: minimum, first quartile (Q1), median, third quartile (Q3), and maximum. It helps identify distribution, spread, and outliers.
+________________________________________
+Q8. How do you plot a box plot in Seaborn?
+A:
+sns.boxplot(x='Species', y='SepalLengthCm', data=iris)
+This shows how SepalLengthCm is distributed across the 3 species.
+________________________________________
+Q9. What do the dots outside the whiskers in a box plot indicate?
+A:
+They are outliers, i.e., values that lie outside 1.5 times the interquartile range (IQR).
+________________________________________
+Q10. Compare Matplotlib and Seaborn. When would you use each?
+A:
+Matplotlib	Seaborn
+Low-level library for basic plots	High-level statistical plotting
+More customizable	Less code for complex plots
+Needs more manual formatting	Automatically handles styling
+Works well with NumPy, Pandas	Works with whole datasets
+________________________________________
+Q11. What is the role of import seaborn as sns and import matplotlib.pyplot as plt?
+A:
+seaborn: For statistical plots like box plots, violin plots, etc.
+matplotlib.pyplot: For basic plots like line, bar, and histogram.
+________________________________________
+Q12. What is %matplotlib inline used for?
+A:
+It ensures that plots are displayed inside the Jupyter notebook immediately after the code cell runs.
+________________________________________
+Q13. What do you infer from the box plot of petal lengths for different species?
+A:
+Setosa has shorter petals and less variance.
+Virginica has longer petals with higher spread.
+Outliers are more common in Versicolor.
+________________________________________
+Q14. How can histograms help detect skewness?
+A:
+If the histogram has a longer tail on one side, it shows right-skewed (positive skew) or left-skewed (negative skew) distribution.
+________________________________________
+Q15. Why is data visualization important in Data Science?
+A:
+It helps understand patterns, identify trends, and communicate insights effectively using visuals.
+________________________________________
+Q16. How do you identify outliers using a box plot?
+A:
+Outliers are any data points that lie below Q1 - 1.5 × IQR or above Q3 + 1.5 × IQR.
+________________________________________
+Q17. Can histograms be used for categorical data?
+A:
+No. Histograms are for numerical (continuous) data. For categorical data, use a bar chart________________________________________
+Q1. What is the objective of this code?
+A:
+To load a dataset, rename columns, analyze summary statistics, and visualize the distribution of numerical features using histograms and box plots, identifying outliers.
+________________________________________
+Q2. What is the purpose of this line: df.columns = ["col1","col2","col3","col4","col5"]?
+A:
+It renames the dataset's columns to more generic names for easier reference.
+________________________________________
+Q3. What does df.info() show?
+A:
+It displays:
+Number of entries
+Data types of each column
+Count of non-null (non-missing) values
+________________________________________
+Q4. How many numeric and categorical columns does the dataset have?
+A:
+The dataset has 4 numeric columns (col1 to col4) and 1 categorical column (col5, an object type).
+________________________________________
+Q5. What does np.unique(df["col5"]) do?
+A:
+It returns the unique class labels or categories in the categorical column col5.
+________________________________________
+Q6. What does df.describe() provide?
+A:
+It returns summary statistics of numeric columns such as:
+count
+mean
+std (standard deviation)
+min
+25%, 50%, 75% percentiles
+max
+________________________________________
+Q7. Why are summary statistics important?
+A:
+They give a quick overview of each feature's distribution, central tendency, and spread.________________________________________
+Q8. What does plt.hist() do in the context of this code?
+A:
+It creates a histogram, a bar plot showing the frequency distribution of the values in a column.
+________________________________________
+Q9. What do the subplots in fig, axes = plt.subplots(2, 2, figsize=(16, 8)) do?
+A:
+They create a grid of 2 rows × 2 columns to display 4 separate histograms for the 4 numeric features.
+________________________________________
+Q10. What do the histogram plots help you identify?
+A:
+Distribution shape (normal, skewed)
+Range
+Potential modes (peaks)
+Gaps or irregularities in data
+Q11. What is the purpose of the box plot section using plt.boxplot()?
+A:
+It creates a single figure with 4 box plots, one for each numeric column, to visualize distributions and outliers.
+________________________________________
+Q12. What do the elements of a box plot represent?
+A:
+Bottom whisker: Minimum (excluding outliers)
+Box bottom: 25th percentile (Q1)
+Line inside box: Median (Q2)
+Box top: 75th percentile (Q3)
+Top whisker: Maximum (excluding outliers)
+Dots: Outliers
+________________________________________
+Q13. How do you identify outliers using IQR?
+A:
+An outlier is any value:
+< Q1 - 1.5×IQR or
+> Q3 + 1.5×IQR
+Where IQR = Q3 - Q1.
+________________________________________
+Q14. In the line: bp = ax.boxplot(data_to_plot), what is data_to_plot?
+A:
+A list of the 4 numerical columns (col1 to col4) passed as input to the box plot.
+________________________________________
+Q15. What is the use of sns.boxplot(x='col1', y='col2', data=df)?
+A:
+It creates a grouped boxplot showing the distribution of col2 for each unique value of col1. Typically used when col1 is categorical or discrete.
+________________________________________
+Q16. What if col1 is continuous in sns.boxplot(x='col1', y='col2', data=df)?
+A:
+The plot may not be meaningful, as boxplots assume the x-axis is categorical or discrete. It could result in too many boxes or a cluttered plot.
+________________________________________
+Q17. What are the advantages of using Seaborn over Matplotlib for box plots?
+A:
+Cleaner and more aesthetic plots
+Requires less code for complex visualizations
+Supports grouped plots with hue
+Automatically handles dataframes
+________________________________________
+Q18. What is %matplotlib inline used for?
+A:
+It tells Jupyter Notebook to display plots inline, directly below the code cell.
+________________________________________
+Q19. What are common visual cues for outliers in the box plot created?
+A:
+Outliers are shown as individual dots or circles that lie outside the whiskers of the box.
+________________________________________
+Q20. Why do we combine all box plots into a single figure?
+A:
+To compare the spread, central tendency, and outliers across all features in one consolidated view.
+
+
+
+
+
