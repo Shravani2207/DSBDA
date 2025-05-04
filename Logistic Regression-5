@@ -1,0 +1,251 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
+df = pd.read_csv('C:/Users/SHRAVANI/Downloads/data5.csv')
+df
+df1 = df.drop("Genre", axis=1)
+
+y = df1.iloc[:, -1].values  # Target variable(selects the last column)
+X = df1.iloc[:, :-1].values  # Feature set(selects all columns except last one)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=2)
+
+LR = LogisticRegression()# Creates logistic regression model (LR) and fits the model to training data  
+LR.fit(X_train, y_train)
+y_pred = LR.predict(X_test)# Uses trained model to predict target variable (y_pred) for the test set (X_test)
+tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()#flattens the confusion matrix into 1D array
+accuracy = (tn + tp) * 100 / (tp + tn + fp + fn)
+precision = tp / (tp + fp)
+recall = tp / (tp + fn)
+f1_score = (2 * precision * recall) / (precision + recall)
+specificity = tn / (tn + fp)
+print(f"Accuracy: {accuracy:.2f}%")
+print(f"Precision: {precision:.2f}")
+print(f"Recall: {recall:.2f}")
+print(f"F1 Score: {f1_score:.2f}")
+print(f"Specificity: {specificity:.2f}")
+Accuracy = (tn+tp)*100/(tp+tn+fp+fn) 
+Accuracy
+
+Precision = tp/(tp+fp) 
+Precision
+Recall = tp/(tp+fn) 
+Recall
+
+f1 = (2*Precision*Recall)/(Precision + Recall)
+f1
+
+Specificity = tn/(tn+fp)
+Specificity
+print("Enter values for the following features:")
+input_features = []#This creates an empty list to store user's input values
+for i in range(X_train.shape[1]): # This loop runs once for each feature (or column) in your training data
+    val = float(input(f"Feature {i+1}: "))#Shows a message like Feature 1:, Feature 2
+    input_features.append(val)#This adds the user's input to list input_features
+input_array = np.array(input_features).reshape(1, -1)
+# Converts list of user inputs into  NumPy array (input_array) and reshapes it to have 1 row and multiple columns 
+prediction = LR.predict(input_array)[0]#"Use model to predict something using values user gave and save answer
+print(f"Predicted Output: {prediction}")
+
+________________________________________
+1. Import Libraries:
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
+pandas: For data manipulation and analysis (working with DataFrames).
+numpy: For numerical operations (e.g., creating arrays).
+train_test_split: To split the dataset into training and testing sets.
+LogisticRegression: For performing logistic regression.
+confusion_matrix: To calculate the confusion matrix and evaluation metrics.
+________________________________________
+2. Load the Dataset:
+df = pd.read_csv('data5.csv')
+ Loads the CSV dataset from the file 'data5.csv' into a pandas DataFrame (df). This dataset will be used for training and testing the logistic regression model.
+________________________________________
+3. Drop the 'Genre' Column:
+df1 = df.drop("Genre", axis=1)
+ Drops the 'Genre' column from the DataFrame df. The axis=1 argument specifies that we are dropping a column (not a row). The resulting DataFrame df1 no longer contains the 'Genre' column, as it's likely not needed for model training.
+________________________________________
+4. Define Features and Target Variable:
+y = df1.iloc[:, -1].values  # Target variable
+X = df1.iloc[:, :-1].values  # Feature set
+ Defines the features and target variable:
+y is the target variable: The last column of df1 (iloc[:, -1] selects the last column). This will be the variable we want to predict.
+X is the feature set: All columns except the last one (iloc[:, :-1] selects all columns except the last one). These are the input features used for prediction.
+________________________________________
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=2)
+Splits the data into training and testing sets:
+test_size=0.25 means 25% of the data will be used for testing, and 75% will be used for training.
+random_state=2 ensures the split is reproducible (it will give the same result each time the code is run).
+X_train, X_test: The feature sets for training and testing. y_train, y_test: The target variables for training and testing.
+________________________________________
+6. Train Logistic Regression Model:
+LR = LogisticRegression()
+LR.fit(X_train, y_train)
+ Creates a logistic regression model (LR) and fits the model to the training data (X_train and y_train). This step trains the model to learn the relationship between the features (X_train) and the target variable (y_train).
+________________________________________
+7. Make Predictions:
+y_pred = LR.predict(X_test)
+ Uses the trained model to predict the target variable (y_pred) for the test set (X_test).
+________________________________________
+8. Compute Confusion Matrix:
+tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
+ Calculates the confusion matrix by comparing the predicted values (y_pred) with the actual values (y_test).
+tn: True Negative (correctly predicted negative class).
+fp: False Positive (incorrectly predicted positive class).
+fn: False Negative (incorrectly predicted negative class).
+tp: True Positive (correctly predicted positive class).
+ravel() flattens the confusion matrix into a 1D array.
+________________________________________
+9. Calculate Metrics:
+accuracy = (tn + tp) * 100 / (tp + tn + fp + fn)
+precision = tp / (tp + fp)
+recall = tp / (tp + fn)
+f1_score = (2 * precision * recall) / (precision + recall)
+specificity = tn / (tn + fp)
+ Calculates various performance metrics for evaluating the logistic regression model:
+Accuracy: Percentage of correct predictions ((tn + tp) / total predictions).
+Precision: The proportion of true positive predictions among all positive predictions (tp / (tp + fp)).
+Recall: The proportion of true positive predictions among all actual positives (tp / (tp + fn)).
+F1 Score: The harmonic mean of precision and recall, used for balancing both metrics ((2 * precision * recall) / (precision + recall)).
+Specificity: The proportion of true negative predictions among all actual negatives (tn / (tn + fp)).
+________________________________________
+10. Display Metrics:
+print(f"Accuracy: {accuracy:.2f}%")
+print(f"Precision: {precision:.2f}")
+print(f"Recall: {recall:.2f}")
+print(f"F1 Score: {f1_score:.2f}")
+print(f"Specificity: {specificity:.2f}")
+Prints the calculated metrics (accuracy, precision, recall, F1 score, specificity) to the console with 2 decimal places for each.
+________________________________________print("Enter values for the following features:")
+ This shows a message telling the user to type values for the input features (like height, weight, age, etc.)
+________________________________________
+input_features = []
+This creates an empty list to store the user's input values.
+________________________________________
+for i in range(X_train.shape[1]):
+ This loop runs once for each feature (or column) in your training data:
+•	X_train.shape[1] gives the number of features (columns)
+•	So if there are 3 features, this loop runs 3 times
+________________________________________
+    val = float(input(f"Feature {i+1}: "))
+
+Shows a message like Feature 1:, Feature 2:, etc.
+  Float=Converts the typed value (text) into a number with decimal, like 3.5.
+  val =  Saves the number into the variable val.
+________________________________________
+    input_features.append(val)
+This adds the user's input to the list input_features
+________________________________________
+12. Convert Input to Numpy Array:
+input_array = np.array(input_features).reshape(1, -1)
+ Converts the list of user inputs (input_features) into a NumPy array (input_array) and reshapes it to have 1 row and multiple columns (because the model expects a 2D array for prediction).
+________________________________________
+13. Make Prediction for User Input:
+prediction = LR.predict(input_array)[0]
+print(f"Predicted Output: {prediction}")
+ Makes a prediction using the trained logistic regression model on the input features provided by the user (input_array).
+The prediction is then displayed as the predicted output (the class label).
+________________________________________
+1. Explain the steps involved in the logistic regression process in this code.
+Answer: In this code, the process of logistic regression is carried out through the following steps:
+1.	Loading the dataset: The dataset data5.csv is loaded using pd.read_csv().
+2.	Preprocessing the data: The Genre column is dropped using df.drop() to ensure it's not included as a feature in the model.
+3.	Defining target and features: The target variable y is defined as the last column of the dataset, and the features X are all columns except the last one.
+4.	Splitting the data: The data is split into training and testing sets using train_test_split(), with 75% for training and 25% for testing.
+5.	Training the model: A logistic regression model (LogisticRegression()) is initialized and trained using the fit() method on the training data.
+6.	Predicting with the model: The trained model is used to predict the target variable for the test set.
+7.	Evaluating the model: A confusion matrix is generated using confusion_matrix(), and various evaluation metrics like accuracy, precision, recall, F1-score, and specificity are computed.
+2. What is the purpose of splitting the dataset into training and testing sets?
+We split the data to check if our model works well on new, unseen data.
+Training set → used to teach the model
+Testing set → used to check how well the model learned
+If it does not work well on new data. So, train_test_split() helps us see if the model can make good predictions on real-world data.
+3. What is a confusion matrix, and how is it used in this code?
+Answer: Confusion matrix is also termed as Error matrix.
+ A confusion matrix is a table that shows how well a model's predictions match the actual answers.. It consists of four components:
+True Positives (TP): Correctly predicted positive cases.
+True Negatives (TN): Correctly predicted negative cases.
+False Positives (FP): The actual value is negative but we predicted it as positive.
+False Negatives (FN): Incorrectly predicted negative cases (actual positive).
+In this code, the confusion matrix is computed using confusion_matrix(y_test, y_pred), and the four values (TP, TN, FP, FN) are extracted using .ravel(). These values are then used to compute various performance metrics like accuracy, precision, recall, F1-score, and specificity.
+4. What is the difference between accuracy, precision, recall, and F1-score?
+Answer:
+Accuracy: It measures the proportion of correct predictions (both TP and TN) out of all predictions. It is calculated as:
+Accuracy={TP + TN}/{TP + TN + FP + FN} 
+Precision: Precision measures the accuracy of positive predictions. It is the proportion of true positives (TP) out of all predicted positives (TP + FP):
+Precision={TP}/{TP + FP} 
+Recall: Recall is the measure of positive values that are predicted correctly out of all actual positive values.
+Recall={TP}/{TP + FN} 
+F1-score: T The F-Measure is always closer to the Precision or Recall, whichever has a smaller value.
+F1-score=2×Precision×Recall/(Precision+Recall) 
+5. What is specificity, and how is it calculated?
+Answer: Specificity (also known as the True Negative Rate) measures how well the model can detect the negative cases correctly.
+Specificity={TN}/{TN + FP} 
+In this code, specificity is calculated after computing the confusion matrix.
+6. What is the purpose of using the predict() method on the logistic regression model?
+Answer: The predict() method is used to make predictions on the test data. In this code, it is applied to the test features (X_test) to obtain the predicted target values (y_pred). 
+7. How are the performance metrics (accuracy, precision, recall, F1-score, specificity) calculated from the confusion matrix?
+Answer:
+Accuracy: (TP + TN) / (TP + TN + FP + FN)
+Precision: TP / (TP + FP)
+Recall: TP / (TP + FN)
+F1-score: 2 * Precision * Recall / (Precision + Recall)
+Specificity: TN / (TN + FP)
+8. How do you input new data into the model for prediction in this code?
+The model's predict() method is used to make a prediction based on the entered feature values.
+9. What is the importance of the random_state parameter in the train_test_split() method?
+Answer: The random_state parameter ensures that the split between training and testing sets is reproducible. 
+10. What is the role of the logistic function (sigmoid) in logistic regression?
+The sigmoid function in logistic regression gives a value between 0 and 1 (a probability).
+If it's > 0.5, we predict class 1. If it's < 0.5, we predict class 0.
+________________________________________
+Q: Can you explain what logistic regression is and how it works?
+Logistic regression is a statistical method for predicting binary classes.
+Logistic regression is a method used to predict Yes/No or 0/1 answers.
+It uses the sigmoid function to turn input numbers into probabilities between 0 and 1.
+Then it decides the class:
+If the result is > 0.5, predict 1
+If the result is < 0.5, predict 0
+________________________________________Q: Why do we use the sigmoid function in logistic regression?
+A: The sigmoid function in logistic regression gives a value between 0 and 1 (a probability) it  also called logistic function, gives an ‘S’ shaped curve________________________________________
+3. Difference Between Logistic and Linear Regression
+ Feature	Linear Regression	Logistic Regression
+ Purpose	Predict a number	Predict a category (Yes/No or 0/1)
+ Output type	Continuous value (e.g., 72.5)	Probability (0 to 1)
+ Function used	Straight line (linear equation)	Sigmoid (S-shaped curve)
+ Technique used	Least Squares (OLS)	Maximum Likelihood Estimation (MLE)
+ Use case example	Predicting marks, salary, price, etc.	Predicting pass/fail, spam/not spam, etc.
+                                  		
+________________________________________Q: Can you walk us through the process of calculating a confusion matrix from predicted and actual values?
+A: Let’s consider the actual and predicted values:
+Actual values: [1, 0, 0, 1, 0]
+Predicted values: [1, 0, 1, 0, 0]
+Using these values, we can derive the confusion matrix as follows:
+True Positives (TP): 1 (predicted 1, actual 1)
+True Negatives (TN): 2 (predicted 0, actual 0)
+False Positives (FP): 1 (predicted 1, actual 0)
+False Negatives (FN): 1 (predicted 0, actual 1)________________________________________
+8. Accuracy, Precision, Recall, and F1 Score Calculation
+Q: How do you calculate accuracy, precision, recall, and F1 score using the confusion matrix values?
+A: From the confusion matrix, we have:
+TP = 1, TN = 2, FP = 1, FN = 1
+Now, using the formulas:
+Accuracy = 1+21+2+1+1=35=60%\frac{1 + 2}{1 + 2 + 1 + 1} = \frac{3}{5} = 60\%
+Precision = 11+1=12=50%\frac{1}{1 + 1} = \frac{1}{2} = 50\%
+Recall = 11+1=12=50%\frac{1}{1 + 1} = \frac{1}{2} = 50\%
+F1 Score = 2×0.5×0.50.5+0.5=0.52 \times \frac{0.5 \times 0.5}{0.5 + 0.5} = 0.5
+________________________________________Q: How would you handle a situation where the dataset is imbalanced (e.g., there are more negative cases than positive cases)?
+A: In If the dataset is imbalanced (more 0s than 1s), we can handle it by:
+1.	Resampling: Either increase the minority class or reduce the majority class.
+2.	SMOTE: Create synthetic data for the minority class.
+3.	Class Weights: Adjust the model to focus more on the minority class.
+________________________________________Q: Can you give examples of real-world applications where logistic regression would be useful?
+  Medical diagnostics: Predicting if a patient has a disease (e.g., cancer or diabetes).
+  Customer churn: Predicting if a customer will leave a company.
+  Spam detection: Classifying emails as spam or not.
+  Marketing: Predicting if a customer will click on an ad or make a purchase.
+
