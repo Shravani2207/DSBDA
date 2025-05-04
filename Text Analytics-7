@@ -1,0 +1,380 @@
+import pandas as pd
+import nltk
+from nltk.tokenize import RegexpTokenizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+from sklearn import metrics
+
+# Load dataset
+data = pd.read_csv('data7.tsv', sep='\t')
+
+# Display first few rows to understand the structure
+data.head()
+
+# Get dataset information
+data.info()
+
+# Count occurrences of each unique sentiment
+data['Sentiment'].value_counts()
+
+# Text preprocessing using CountVectorizer
+# Tokenizer to remove symbols and numbers
+tokenizer = RegexpTokenizer(r'[a-zA-Z0-9]+')
+
+
+# Convert text data into numerical feature vectors
+cv = CountVectorizer(lowercase=True, stop_words='english', tokenizer=tokenizer.tokenize)
+text_counts = cv.fit_transform(data['Phrase'])
+print(text_counts)
+
+
+# Split dataset into training and testing sets (70% train, 30% test)
+X_train, X_test, y_train, y_test = train_test_split(text_counts, data['Sentiment'], test_size=0.3, random_state=1)
+
+# Train a Naive Bayes classifier
+clf = MultinomialNB()
+clf.fit(X_train, y_train)
+
+# Make predictions on the test set
+predicted = clf.predict(X_test)
+
+# Calculate and print model accuracy
+accuracy = metrics.accuracy_score(y_test, predicted)
+print("MultinomialNB Accuracy:", accuracy)
+
+# Use TF-IDF Vectorizer to transform text data
+tfidf = TfidfVectorizer()
+text_tfidf = tfidf.fit_transform(data['Phrase'])
+
+# Print transformed text feature matrix
+print(text_tfidf)
+
+
+
+________________________________________
+1. Install Dependencies:
+pip install nltk
+pip install --upgrade pip
+📌 Installs the necessary packages:
+•	nltk: Natural Language Toolkit for text processing.
+•	pip install --upgrade pip: Updates pip, the Python package manager, to the latest version.
+________________________________________
+2. Import Libraries:
+import nltk
+from nltk.tokenize import sent_tokenize
+📌 Imports the NLTK library and sent_tokenize function, which is used to split text into sentences.
+________________________________________
+3. Download NLTK Data:
+nltk.download('punkt')
+📌 Downloads the 'punkt' tokenizer models for sentence tokenization.
+________________________________________
+4. Text Example:
+text = """Hello Mr. Smith, how are you doing today ? The weather is great, and the city is awesome ! The sky is pinkish-blue. You shouldn't eat cardboard """
+📌 Defines a sample text to demonstrate tokenization and other NLTK features.
+________________________________________
+5. Tokenize Sentences:
+tokenized_text = sent_tokenize(text)
+print(tokenized_text)
+📌 Tokenizes the text into sentences using sent_tokenize. It splits the text into individual sentences and prints the result.
+________________________________________
+6. Tokenize Words:
+from nltk.tokenize import word_tokenize
+tokenized_word = word_tokenize(text)
+print(tokenized_word)
+📌 Tokenizes the text into words using word_tokenize. It splits the text into individual words and prints the result.
+________________________________________
+7. Frequency Distribution of Words:
+from nltk.probability import FreqDist
+fdist = FreqDist(tokenized_word)
+print(fdist)
+📌 Creates a frequency distribution of the tokenized words. This shows how often each word appears in the text.
+________________________________________
+8. Remove Stopwords:
+from nltk.corpus import stopwords
+nltk.download('stopwords')
+stop_words = set(stopwords.words("english"))
+print(stop_words)
+📌 Downloads and loads a list of common stopwords (e.g., "the", "and", "is") from NLTK's corpus and prints them. These words are generally removed from text processing to focus on more meaningful words.
+________________________________________
+9. Filter Out Stopwords:
+filtered_sent = []
+for w in tokenized_word:
+    if w not in stop_words:
+        filtered_sent.append(w)
+print("Tokenized Sentence:", tokenized_word)
+print("Filtered Sentence:", filtered_sent)
+📌 Filters out stopwords from the tokenized words. It loops through the words and appends only the words that are not in the stopwords list. The original and filtered sentences are then printed.
+________________________________________
+10. Stemming Words:
+from nltk.stem import PorterStemmer
+ps = PorterStemmer()
+stemmed_words = []
+for w in filtered_sent:
+    stemmed_words.append(ps.stem(w))
+print("Filtered Sentence:", filtered_sent)
+print("Stemmed Sentence:", stemmed_words)
+📌 Applies stemming to reduce words to their root form (e.g., "running" -> "run"). The filtered sentence is stemmed, and both filtered and stemmed sentences are printed.
+________________________________________
+11. Lemmatization:
+from nltk.stem.wordnet import WordNetLemmatizer
+nltk.download('wordnet')
+lem = WordNetLemmatizer()
+word = "flying"
+print("Lemmatized Word:", lem.lemmatize(word, "v"))
+📌 Uses a lemmatizer (from WordNet) to reduce a word to its base form (e.g., "flying" -> "fly"). Here, the lemmatizer is used with the verb ("v") context.
+________________________________________
+12. Compare Lemmatization and Stemming:
+print("Stemmed Word:", stem.stem(word))
+📌 Compares stemming and lemmatization for the word "flying". Stemming is typically more aggressive, while lemmatization aims to return the actual root word.
+________________________________________
+13. Part of Speech Tagging:
+sent = "Albert Einstein was born in Ulm, Germany in 1879."
+tokens = nltk.word_tokenize(sent)
+print(tokens)
+📌 Tokenizes a sentence and prints the resulting word tokens.
+________________________________________
+14. POS Tagging:
+import nltk
+nltk.download('averaged_perceptron_tagger')
+nltk.pos_tag(tokens)
+📌 Performs part-of-speech (POS) tagging on the tokenized words. It assigns each word a POS label (e.g., noun, verb).
+________________________________________
+15. Load and Explore the Dataset:
+import pandas as pd
+data = pd.read_csv('/home/gescoe/Desktop/TEB30/train.tsv', sep='\t')
+data.head()
+data.info()
+data.Sentiment.value_counts()
+📌 Loads a dataset from a .tsv file using pandas. It prints the first few rows (head()), provides information about the dataset (info()), and counts the occurrences of each sentiment class (Sentiment.value_counts()).
+________________________________________
+16. Plot Sentiment Distribution:
+import matplotlib.pyplot as plt
+Sentiment_count = data.groupby('Sentiment').count()
+plt.bar(Sentiment_count.index.values, Sentiment_count['Phrase'])
+plt.xlabel('Review Sentiments')
+plt.ylabel('Number of Review')
+plt.show()
+📌 Plots a bar chart of the number of reviews for each sentiment. It uses matplotlib to visualize the sentiment distribution.
+________________________________________
+17. Text Vectorization using CountVectorizer:
+from sklearn.feature_extraction.text import CountVectorizer
+from nltk.tokenize import RegexpTokenizer
+token = RegexpTokenizer(r'[a-zA-Z0-9]+')
+cv = CountVectorizer(lowercase=True, stop_words='english', ngram_range=(1, 1), tokenizer=token.tokenize)
+text_counts = cv.fit_transform(data['Phrase'])
+📌 Vectorizes text data using the CountVectorizer:
+•	Converts text to a matrix of token counts.
+•	Converts text to lowercase and removes stopwords.
+•	Tokenizes using a custom RegexpTokenizer to keep only alphanumeric characters.
+•	ngram_range=(1,1) means it uses unigrams (single words).
+________________________________________
+18. Split Data into Training and Testing Sets:
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(text_counts, data['Sentiment'], test_size=0.3, random_state=1)
+📌 Splits the dataset into training (70%) and testing (30%) sets using train_test_split.
+________________________________________
+19. Train Naive Bayes Model:
+from sklearn.naive_bayes import MultinomialNB
+from sklearn import metrics
+clf = MultinomialNB().fit(X_train, y_train)
+predicted = clf.predict(X_test)
+📌 Trains a Naive Bayes classifier (MultinomialNB) on the training data (X_train and y_train), and makes predictions on the test set (X_test).
+________________________________________
+20. Evaluate Model Accuracy:
+print("MultinomialNB Accuracy:", metrics.accuracy_score(y_test, predicted))
+📌 Calculates and prints the accuracy of the model by comparing the predicted values (predicted) with the true values (y_test).
+________________________________________
+21. Text Vectorization using TF-IDF:
+from sklearn.feature_extraction.text import TfidfVectorizer
+tf = TfidfVectorizer()
+text_tf = tf.fit_transform(data['Phrase'])
+📌 Vectorizes the text using TF-IDF:
+•	TfidfVectorizer transforms the text into a term frequency-inverse document frequency (TF-IDF) matrix, which reflects the importance of words in the text corpus.
+________________________________________
+22. Split Data Again for TF-IDF:
+X_train, X_test, y_train, y_test = train_test_split(text_tf, data['Sentiment'], test_size=0.3, random_state=123)
+📌 Splits the dataset again, this time using the TF-IDF vectorized data (text_tf).
+________________________________________
+23. Train and Evaluate Naive Bayes Model Again:
+clf = MultinomialNB().fit(X_train, y_train)
+predicted = clf.predict(X_test)
+print("MultinomialNB Accuracy:", metrics.accuracy_score(y_test, predicted))
+📌 Trains and evaluates the Naive Bayes model again, this time using the TF-IDF features (X_train and X_test), and prints the accuracy.
+________________________________________
+Summary:
+This code covers a variety of text processing tasks, including:
+1.	Tokenization (sentences and words).
+2.	Removing stopwords and stemming.
+3.	Lemmatization.
+4.	Part-of-speech tagging.
+5.	Text vectorization using CountVectorizer and TF-IDF.
+6.	Naive Bayes model training and evaluation for sentiment analysis.
+Let me know if you need any further clarifications!
+
+
+Here’s a list of likely oral/viva exam questions based on your code, along with clear answers you can confidently give during your Data Science or NLP-related oral exam:
+________________________________________
+🔹 Basic NLTK Questions
+Q1. What does sent_tokenize() do?
+A: It splits a paragraph of text into individual sentences using pre-trained models for punctuation and abbreviations.
+Q2. What is the purpose of word_tokenize()?
+A: It breaks a sentence or paragraph into individual words and punctuation marks (tokens).
+Q3. What is the use of FreqDist in NLTK?
+A: FreqDist counts the frequency of each token (word) in a list. It's useful for understanding word distribution.
+Q4. What are stopwords and why do we remove them?
+A: Stopwords are common words (like "the", "is", "in") that carry little meaning. Removing them reduces noise in text processing.
+________________________________________
+🔹 Text Preprocessing Concepts
+Q5. What is the difference between stemming and lemmatization?
+A:
+•	Stemming cuts off prefixes/suffixes to reduce words to a root form (e.g., "flying" → "fli").
+•	Lemmatization reduces words to their meaningful root word (lemma) using dictionary lookup (e.g., "flying" → "fly").
+Q6. What is the role of PorterStemmer and WordNetLemmatizer?
+A:
+•	PorterStemmer performs stemming.
+•	WordNetLemmatizer performs lemmatization using the WordNet lexical database.
+________________________________________
+🔹 POS Tagging
+Q7. What is POS tagging and which function is used for it?
+A: Part-of-Speech tagging labels each word with its grammatical role like noun, verb, adjective, etc. nltk.pos_tag() is used for this.
+________________________________________
+🔹 Dataset-Related Questions
+Q8. What is the dataset used in this code?
+A: The code uses a tab-separated dataset named train.tsv, which contains phrases and their corresponding sentiment labels.
+Q9. What are the columns in the dataset?
+A: Common columns include PhraseId, SentenceId, Phrase, and Sentiment.
+Q10. What does data.info() and value_counts() do?
+A:
+•	data.info() gives summary of the dataset: column names, non-null counts, data types.
+•	value_counts() gives count of each unique sentiment value.
+________________________________________
+🔹 Data Visualization
+Q11. What is the purpose of the bar plot using matplotlib?
+A: To visualize how many phrases belong to each sentiment category (e.g., 0 - negative, 4 - positive).
+________________________________________
+🔹 Feature Extraction
+Q12. What is CountVectorizer and what does it do?
+A: It converts text data into a matrix of token counts (Bag of Words model), which can be used as features in machine learning models.
+Q13. What is the role of RegexpTokenizer?
+A: It tokenizes text using regular expressions. Here, it extracts only alphanumeric tokens ([a-zA-Z0-9]+).
+Q14. What is TfidfVectorizer and how is it different from CountVectorizer?
+A:
+•	CountVectorizer counts word occurrences.
+•	TfidfVectorizer also considers how common a word is across documents (TF × IDF), reducing importance of frequent but less meaningful words.
+________________________________________
+🔹 Model Training & Evaluation
+Q15. Which model is used for text classification?
+A: MultinomialNB — Multinomial Naive Bayes, suitable for text data with count or frequency-based features.
+Q16. How is model performance evaluated?
+A: Using accuracy_score() from sklearn.metrics, which compares predicted vs actual sentiment labels.
+Q17. What does train_test_split() do?
+A: It splits the dataset into training and testing sets to evaluate model performance on unseen data.
+________________________________________
+🔹 General Theory Questions
+Q18. What is Naive Bayes? Why is it “naive”?
+A: Naive Bayes is a probabilistic classifier based on Bayes’ Theorem. It assumes all features (words) are independent — which is rarely true, hence it's called naive.
+Q19. Why is Naive Bayes good for text classification?
+A: It’s simple, fast, and performs well for high-dimensional data like text, especially with word frequency features.
+________________________________________
+Let me know if you want a PDF summary with questions and answers for easy print or sharing, or if you want me to explain anything from this list with examples or diagrams.
+ 
+
+
+Here is a comprehensive list of likely oral/viva questions and answers based on your Text Analytics assignment using NLTK and TF-IDF, covering both theory and code implementation.
+________________________________________
+✅ General & Theoretical Questions
+________________________________________
+Q1. What is Text Analytics?
+A: Text analytics is the process of extracting useful information and patterns from unstructured text data using techniques from NLP, statistics, and machine learning.
+________________________________________
+Q2. What is NLP? Why is it important?
+A: NLP (Natural Language Processing) enables computers to understand, interpret, and generate human language. It’s important for applications like chatbots, translation, sentiment analysis, and document classification.
+________________________________________
+Q3. What is the purpose of text preprocessing?
+A: Text preprocessing cleans and prepares raw text for analysis. It helps reduce noise, standardize formats, and extract meaningful features.
+________________________________________
+Q4. What are the main preprocessing steps used here?
+A:
+•	Tokenization
+•	Stop word removal
+•	POS tagging
+•	Stemming
+•	Lemmatization
+________________________________________
+Q5. Differentiate between Stemming and Lemmatization.
+A:
+Feature	Stemming	Lemmatization
+Definition	Removes affixes	Uses vocab & grammar rules
+Output	Root form (may not be valid)	Dictionary form (valid word)
+Example	"flying" → "fli"	"flying" → "fly"
+Library	PorterStemmer	WordNetLemmatizer
+________________________________________
+Q6. What is Tokenization? What are its types?
+A: Tokenization splits text into smaller parts:
+•	Sentence Tokenization: Splits into sentences (sent_tokenize)
+•	Word Tokenization: Splits into words (word_tokenize)
+________________________________________
+Q7. What are stop words? Why do we remove them?
+A: Stop words are common words (like is, the, an, in) that do not add much meaning. Removing them simplifies the text and reduces noise.
+________________________________________
+Q8. What is POS tagging?
+A: POS tagging identifies the grammatical type of each word (noun, verb, adjective, etc.). In NLTK, we use nltk.pos_tag().
+________________________________________
+✅ Dataset & Feature Engineering
+________________________________________
+Q9. What dataset are you using in this experiment?
+A: The "Sentiment Analysis of Movie Reviews" dataset from Kaggle. It's a tab-separated file with columns like Phrase, PhraseId, SentenceId, and Sentiment.
+________________________________________
+Q10. What is the purpose of CountVectorizer and TfidfVectorizer?
+A:
+•	CountVectorizer: Converts text to a Bag of Words (word count matrix).
+•	TfidfVectorizer: Converts text to TF-IDF values (considers importance of words across documents).
+________________________________________
+Q11. What is TF-IDF?
+A: TF-IDF stands for Term Frequency-Inverse Document Frequency. It gives high weight to words that are frequent in a document but rare in the entire corpus. It helps identify "important" words.
+________________________________________
+Q12. What’s the formula for IDF?
+A:
+IDF(t)=log⁡(Ndft)\text{IDF}(t) = \log\left(\frac{N}{df_t}\right) 
+Where:
+•	NN = total number of documents
+•	dftdf_t = number of documents containing the term tt
+________________________________________
+✅ Machine Learning Model
+________________________________________
+Q13. Which ML algorithm is used here? Why?
+A: Multinomial Naive Bayes — It's simple, fast, and effective for text classification using frequency features like Bag of Words or TF-IDF.
+________________________________________
+Q14. What does train_test_split do?
+A: It splits the dataset into training and testing parts, usually in a ratio like 70:30, to evaluate model performance on unseen data.
+________________________________________
+Q15. How do you evaluate the model’s performance?
+A: Using accuracy:
+Accuracy=Correct PredictionsTotal Predictions\text{Accuracy} = \frac{\text{Correct Predictions}}{\text{Total Predictions}} 
+We use metrics.accuracy_score(y_test, predicted) from sklearn.
+________________________________________
+✅ Code-Based Practical Questions
+________________________________________
+Q16. What does RegexpTokenizer(r'[a-zA-Z0-9]+') do?
+A: It tokenizes text by matching only alphanumeric words (removes punctuation and symbols).
+________________________________________
+Q17. How does CountVectorizer() work internally?
+A: It builds a vocabulary of unique words from all documents and represents each document as a vector of word counts.
+________________________________________
+Q18. What does TfidfVectorizer().fit_transform() return?
+A: A sparse matrix containing TF-IDF values for each word in each document.
+________________________________________
+Q19. What does data['Sentiment'].value_counts() show?
+A: It displays how many phrases are labeled with each sentiment class (e.g., 0 to 4).
+________________________________________
+Q20. Why do we need to transform text to numerical features?
+A: Machine learning models can't handle raw text directly — we convert it to numeric vectors using BoW or TF-IDF to feed into models.
+________________________________________
+✅ Conclusion-Based Question
+________________________________________
+Q21. What did you conclude from this experiment?
+A: I learned how to preprocess text using NLTK (tokenization, POS tagging, stop words, stemming, lemmatization), represent it using TF-IDF, and classify sentiment using a Multinomial Naive Bayes classifier.
+________________________________________
+Would you like me to generate a neatly formatted PDF of these Q&A or prepare a PowerPoint slide summary? I can also add code snippets alongside theory if needed!
+
